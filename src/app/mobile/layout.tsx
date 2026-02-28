@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 /* ─── Hand-drawn SVG icons ────────────────────────────── */
 
 function HomeIcon({ active }: { active: boolean }) {
-  const c = active ? "#f59e0b" : "rgba(255,255,255,0.5)";
+  const c = active ? "#f59e0b" : "#9ca3af";
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path
@@ -23,7 +23,7 @@ function HomeIcon({ active }: { active: boolean }) {
 }
 
 function RegisterIcon({ active }: { active: boolean }) {
-  const c = active ? "#f59e0b" : "rgba(255,255,255,0.5)";
+  const c = active ? "#f59e0b" : "#9ca3af";
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path
@@ -43,22 +43,20 @@ function RegisterIcon({ active }: { active: boolean }) {
 }
 
 function CentresIcon({ active }: { active: boolean }) {
-  const c = active ? "#f59e0b" : "rgba(255,255,255,0.5)";
+  const c = active ? "#f59e0b" : "#9ca3af";
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      {/* Hand-drawn map pin — teardrop, slightly imperfect */}
       <path
         d="M12 2.4 C16.9 2.2 20.6 6 20.7 10.6 C20.8 15.8 13.2 21.6 12.1 22.2 C11.0 21.5 3.2 15.6 3.3 10.5 C3.4 5.9 7.1 2.6 12 2.4"
         stroke={c} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"
       />
-      {/* Inner circle */}
       <circle cx="12" cy="10.2" r="3" stroke={c} strokeWidth="2" fill="none" />
     </svg>
   );
 }
 
 function InfoIcon({ active }: { active: boolean }) {
-  const c = active ? "#f59e0b" : "rgba(255,255,255,0.5)";
+  const c = active ? "#f59e0b" : "#9ca3af";
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path
@@ -107,7 +105,6 @@ export default function MobileLayout({
       shadow.appendChild(style);
     };
     injectFix();
-    /* retry once after React finishes painting */
     const t = setTimeout(injectFix, 400);
     return () => clearTimeout(t);
   }, []);
@@ -115,20 +112,25 @@ export default function MobileLayout({
   return (
     <div
       style={{
-        minHeight: "100dvh",
+        height: "100dvh",
         display: "flex",
         flexDirection: "column",
+        overflow: "hidden",
         background: "var(--bg)",
         maxWidth: "430px",
         margin: "0 auto",
       }}
     >
+      {/* Pages live here — no page-level scroll; pages manage their own scroll */}
       <main
-        style={{ flex: 1, overflowY: "auto", paddingBottom: "88px" }}
+        style={{ flex: 1, overflow: "hidden" }}
         className="no-scrollbar"
       >
         {children}
       </main>
+
+      {/* Spacer so flex layout gives main exactly (100dvh - 64px) of height */}
+      <div style={{ height: "64px", flexShrink: 0 }} />
 
       {/* 4-tab sticky bottom nav */}
       <nav
@@ -140,14 +142,14 @@ export default function MobileLayout({
           width: "100%",
           maxWidth: "430px",
           minHeight: "64px",
-          background: "#1a3a10",
+          background: "#ffffff",
+          borderTop: "1px solid #f0f0f0",
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",
           padding: "10px 0 env(safe-area-inset-bottom, 14px)",
           zIndex: 100,
-          boxShadow: "0 -3px 20px rgba(0,0,0,0.3)",
-          borderRadius: "16px 16px 0 0",
+          boxShadow: "0 -4px 16px rgba(0,0,0,0.05)",
         }}
       >
         {NAV_ITEMS.map((item) => {
@@ -178,7 +180,7 @@ export default function MobileLayout({
                   fontFamily: "var(--font-kalam)",
                   textTransform: "uppercase",
                   letterSpacing: "0.04em",
-                  color: isActive ? "#f59e0b" : "rgba(255,255,255,0.5)",
+                  color: isActive ? "#f59e0b" : "#9ca3af",
                   lineHeight: 1,
                 }}
               >

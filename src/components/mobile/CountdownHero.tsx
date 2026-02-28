@@ -42,7 +42,7 @@ export default function CountdownHero() {
   return (
     <div
       style={{
-        minHeight: "calc(100dvh - 64px)",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
         background: "#ffffff",
