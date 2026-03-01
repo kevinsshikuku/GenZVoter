@@ -65,7 +65,7 @@ export default function RootLayout({
         {/* Prevent flash of wrong theme — runs before paint */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){var t=localStorage.getItem('genz-theme');var s=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t||s);})();`,
+            __html: `(function(){var t=localStorage.getItem('genz-theme');document.documentElement.setAttribute('data-theme',t||'light');})();`,
           }}
         />
       </head>

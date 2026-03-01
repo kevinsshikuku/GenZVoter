@@ -24,12 +24,9 @@ export default function ThemeProvider({
   const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    // Read stored preference, fall back to system preference
+    // Read stored preference only — default is always light
     const stored = localStorage.getItem("genz-theme") as Theme | null;
-    const system: Theme = window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
-    const initial = stored ?? system;
+    const initial = stored ?? "light";
     setTheme(initial);
     document.documentElement.setAttribute("data-theme", initial);
     // Enable smooth transitions after hydration
