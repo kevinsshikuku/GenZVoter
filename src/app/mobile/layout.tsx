@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useTheme } from "@/components/ThemeProvider";
 
 /* ─── Hand-drawn SVG icons ────────────────────────────── */
 
@@ -72,6 +73,22 @@ function InfoIcon({ active }: { active: boolean }) {
   );
 }
 
+/* ─── Profile / avatar icon ───────────────────────────── */
+
+function ProfileIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      {/* Head */}
+      <circle cx="12" cy="8.5" r="3.5" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" />
+      {/* Shoulders */}
+      <path
+        d="M3.5 20.5 C3.5 16.4 7.4 13.1 12 13.1 C16.6 13.1 20.5 16.4 20.5 20.5"
+        stroke="currentColor" strokeWidth="1.9" strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 const NAV_ITEMS = [
   { href: "/mobile",          label: "Home",     Icon: HomeIcon     },
   { href: "/mobile/register", label: "Register", Icon: RegisterIcon },
@@ -85,6 +102,7 @@ export default function MobileLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { theme, toggle } = useTheme();
 
   /* ── Dev-only: stop the Next.js DevTools button from blocking HOME ── */
   useEffect(() => {
@@ -130,7 +148,7 @@ export default function MobileLayout({
           transform: "translateX(-50%)",
           width: "100%",
           maxWidth: "430px",
-          background: "#f4f4f4",
+          background: "var(--header-bg)",
           zIndex: 100,
           padding: "14px 20px 12px",
           display: "flex",
@@ -145,7 +163,7 @@ export default function MobileLayout({
               fontFamily: "var(--font-boogaloo)",
               fontSize: "28px",
               lineHeight: 1,
-              color: "#111111",
+              color: "var(--header-text)",
             }}
           >
             GenZVoter
@@ -154,26 +172,37 @@ export default function MobileLayout({
             style={{
               fontSize: "13px",
               fontWeight: 400,
-              color: "#111111",
+              color: "var(--header-text)",
               letterSpacing: "0.01em",
               lineHeight: 1.2,
+              opacity: 0.7,
             }}
           >
             2027 General Election
           </span>
         </div>
 
-        {/* Avatar placeholder */}
-        <div
+        {/* Profile avatar — click to toggle dark/light theme */}
+        <button
+          onClick={toggle}
+          aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
           style={{
             width: "42px",
             height: "42px",
             borderRadius: "50%",
-            background: "#d1d5db",
-            border: "2px solid #9ca3af",
+            background: "var(--surface2)",
+            border: "2px solid var(--border)",
             flexShrink: 0,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "var(--muted)",
+            padding: 0,
           }}
-        />
+        >
+          <ProfileIcon />
+        </button>
 
         {/* Partial-width divider */}
         <div
@@ -183,7 +212,7 @@ export default function MobileLayout({
             left: "20px",
             right: "20px",
             height: "1px",
-            background: "#ebebeb",
+            background: "var(--header-border)",
             boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
           }}
         />
@@ -213,8 +242,8 @@ export default function MobileLayout({
           width: "100%",
           maxWidth: "430px",
           minHeight: "64px",
-          background: "#ffffff",
-          borderTop: "1px solid #f0f0f0",
+          background: "var(--bottom-nav-bg)",
+          borderTop: "1px solid var(--bottom-nav-border)",
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",
