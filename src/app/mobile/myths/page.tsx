@@ -48,16 +48,16 @@ export default function MobileMythsPage() {
   };
 
   return (
-    <div style={{ padding: "24px 20px", minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
+    <div style={{ padding: "24px 20px", minHeight: "100dvh", display: "flex", flexDirection: "column", background: "var(--bg)" }}>
       {/* Header */}
       <div style={{ marginBottom: "20px" }}>
         <p style={{ fontSize: "12px", color: "#a855f7", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "6px" }}>
           Myths vs Reality
         </p>
-        <h1 style={{ fontSize: "24px", fontWeight: 900, color: "#f8fafc", margin: "0 0 6px" }}>
+        <h1 style={{ fontSize: "24px", fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
           Make it make sense 👀
         </h1>
-        <p style={{ fontSize: "13px", color: "#64748b", margin: 0 }}>
+        <p style={{ fontSize: "13px", color: "var(--muted)", margin: 0 }}>
           Swipe to flip. {MYTH_CARDS.length} myths debunked.
         </p>
       </div>
@@ -134,7 +134,7 @@ export default function MobileMythsPage() {
                   Myth
                 </span>
               </div>
-              <h2 style={{ fontSize: "clamp(18px, 5vw, 22px)", fontWeight: 800, color: "#f8fafc", margin: 0, lineHeight: 1.3 }}>
+              <h2 style={{ fontSize: "clamp(18px, 5vw, 22px)", fontWeight: 800, color: "var(--text)", margin: 0, lineHeight: 1.3 }}>
                 &ldquo;{card.myth}&rdquo;
               </h2>
               <p style={{ fontSize: "12px", color: "#64748b", margin: 0 }}>
@@ -174,7 +174,7 @@ export default function MobileMythsPage() {
                   Reality
                 </span>
               </div>
-              <p style={{ fontSize: "clamp(15px, 4vw, 17px)", color: "#e2e8f0", lineHeight: 1.5, margin: 0, fontWeight: 500 }}>
+              <p style={{ fontSize: "clamp(15px, 4vw, 17px)", color: "var(--text2)", lineHeight: 1.5, margin: 0, fontWeight: 500 }}>
                 {card.reality}
               </p>
               {card.stat && (

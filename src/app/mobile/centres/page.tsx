@@ -5,16 +5,16 @@ import { REGISTRATION_CENTRES } from "@/lib/data";
 import type { RegistrationCentre } from "@/lib/types";
 
 const G = {
-  dark:    "#1a3a10",
-  mid:     "#2d5a1a",
-  pale:    "#e6f0de",
-  gold:    "#f59e0b",
-  bg:      "#f5f5f0",
-  surface: "#ffffff",
-  text:    "#111111",
-  muted:   "#6b7280",
-  border:  "#e5e7eb",
-  border2: "#d1d5db",
+  dark:    "var(--green-dark)",
+  mid:     "var(--green-mid)",
+  pale:    "var(--green-pale)",
+  gold:    "var(--gold)",
+  bg:      "var(--bg)",
+  surface: "var(--surface)",
+  text:    "var(--text)",
+  muted:   "var(--muted)",
+  border:  "var(--border2)",
+  border2: "var(--border)",
 };
 
 /* ── Category definitions ── */
@@ -28,7 +28,7 @@ const CATEGORIES = [
     accent: G.dark,
     accentPale: G.pale,
     sketchBorder: "255px 15px 225px 15px / 15px 225px 15px 255px",
-    shadowColor: "#1a3a10",
+    shadowColor: "var(--green-dark)",
   },
   {
     type: "ward" as const,

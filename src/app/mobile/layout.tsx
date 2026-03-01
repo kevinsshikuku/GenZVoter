@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useTheme } from "@/components/ThemeProvider";
 
 /* ─── Hand-drawn SVG icons ────────────────────────────── */
 
@@ -72,6 +73,36 @@ function InfoIcon({ active }: { active: boolean }) {
   );
 }
 
+/* ─── Theme toggle icons ──────────────────────────────── */
+
+function MoonIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M21 12.8 C19.5 16.8 15.6 19.6 11 19.5 C5.8 19.4 1.7 15.1 1.8 9.9 C1.9 6.3 3.9 3.2 6.9 1.6 C4.2 5.1 4.3 10.1 7.3 13.5 C10.5 17.1 15.8 17.8 19.8 15.2 C20.6 14.5 21 13.6 21 12.8 Z"
+        stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+function SunIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="4.5" stroke="currentColor" strokeWidth="1.8" fill="none" />
+      <path d="M12 2.5 L12 4.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M12 19.5 L12 21.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M2.5 12 L4.5 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M19.5 12 L21.5 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M5.6 5.6 L7 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M17 17 L18.4 18.4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M18.4 5.6 L17 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M7 17 L5.6 18.4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 const NAV_ITEMS = [
   { href: "/mobile",          label: "Home",     Icon: HomeIcon     },
   { href: "/mobile/register", label: "Register", Icon: RegisterIcon },
@@ -85,6 +116,7 @@ export default function MobileLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { theme, toggle } = useTheme();
 
   /* ── Dev-only: stop the Next.js DevTools button from blocking HOME ── */
   useEffect(() => {
@@ -130,7 +162,7 @@ export default function MobileLayout({
           transform: "translateX(-50%)",
           width: "100%",
           maxWidth: "430px",
-          background: "#f4f4f4",
+          background: "var(--header-bg)",
           zIndex: 100,
           padding: "14px 20px 12px",
           display: "flex",
@@ -145,7 +177,7 @@ export default function MobileLayout({
               fontFamily: "var(--font-boogaloo)",
               fontSize: "28px",
               lineHeight: 1,
-              color: "#111111",
+              color: "var(--header-text)",
             }}
           >
             GenZVoter
@@ -154,26 +186,37 @@ export default function MobileLayout({
             style={{
               fontSize: "13px",
               fontWeight: 400,
-              color: "#111111",
+              color: "var(--header-text)",
               letterSpacing: "0.01em",
               lineHeight: 1.2,
+              opacity: 0.7,
             }}
           >
             2027 General Election
           </span>
         </div>
 
-        {/* Avatar placeholder */}
-        <div
+        {/* Theme toggle — avatar button with sun/moon icon */}
+        <button
+          onClick={toggle}
+          aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
           style={{
             width: "42px",
             height: "42px",
             borderRadius: "50%",
-            background: "#d1d5db",
-            border: "2px solid #9ca3af",
+            background: theme === "dark" ? "var(--surface2)" : "#e2e5e0",
+            border: "2px solid var(--border)",
             flexShrink: 0,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: theme === "dark" ? "#f59e0b" : "#4a5568",
+            padding: 0,
           }}
-        />
+        >
+          {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+        </button>
 
         {/* Partial-width divider */}
         <div
@@ -183,7 +226,7 @@ export default function MobileLayout({
             left: "20px",
             right: "20px",
             height: "1px",
-            background: "#ebebeb",
+            background: "var(--header-border)",
             boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
           }}
         />
@@ -213,8 +256,8 @@ export default function MobileLayout({
           width: "100%",
           maxWidth: "430px",
           minHeight: "64px",
-          background: "#ffffff",
-          borderTop: "1px solid #f0f0f0",
+          background: "var(--bottom-nav-bg)",
+          borderTop: "1px solid var(--bottom-nav-border)",
           display: "flex",
           justifyContent: "space-around",
           alignItems: "center",

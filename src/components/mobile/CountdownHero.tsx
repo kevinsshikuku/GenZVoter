@@ -46,7 +46,7 @@ export default function CountdownHero() {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        background: "#ffffff",
+        background: "var(--surface)",
         position: "relative",
         overflow: "hidden",
       }}
@@ -55,20 +55,17 @@ export default function CountdownHero() {
       <div
         style={{
           width: "100%",
-          background: "#ffffff",
-          height: "180px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
+          background: "var(--surface)",
+          flex: "0 0 30%",
+          minHeight: 0,
+          position: "relative",
         }}
       >
         <Image
           src="/assets/kenyan-flag.png"
           alt="Kenya flag"
-          width={430}
-          height={180}
-          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          fill
+          style={{ objectFit: "contain" }}
           priority
         />
       </div>
@@ -76,14 +73,14 @@ export default function CountdownHero() {
       {/* Content */}
       <div
         style={{
-          flex: 1,
+          flex: "1 1 0",
+          minHeight: 0,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          padding: "0 24px 28px",
-          marginTop: "-64px",
-          gap: "24px",
+          padding: "0 24px 16px",
+          gap: "12px",
           textAlign: "center",
         }}
       >
@@ -111,7 +108,7 @@ export default function CountdownHero() {
                   fontSize: "clamp(12px, 3vw, 15px)",
                   fontFamily: "var(--font-kalam)",
                   fontWeight: 700,
-                  color: "#9ca3af",
+                  color: "var(--subtle)",
                   textTransform: "uppercase",
                   letterSpacing: "0.12em",
                 }}
@@ -123,7 +120,7 @@ export default function CountdownHero() {
                 style={{
                   fontSize: "clamp(60px, 19vw, 86px)",
                   fontFamily: "var(--font-marker)",
-                  color: "#1a3a10",
+                  color: "var(--green-dark)",
                   lineHeight: 1,
                   fontVariantNumeric: "tabular-nums",
                 }}
@@ -135,7 +132,7 @@ export default function CountdownHero() {
                   fontSize: "clamp(12px, 3vw, 15px)",
                   fontFamily: "var(--font-kalam)",
                   fontWeight: 700,
-                  color: "#9ca3af",
+                  color: "var(--subtle)",
                   textTransform: "uppercase",
                   letterSpacing: "0.12em",
                 }}
@@ -150,7 +147,7 @@ export default function CountdownHero() {
             style={{
               fontSize: "clamp(28px, 8vw, 42px)",
               fontFamily: "var(--font-marker)",
-              color: "#1a3a10",
+              color: "var(--green-dark)",
               borderBottom: "4px solid #f59e0b",
               paddingBottom: "4px",
               marginTop: "4px",
@@ -164,7 +161,7 @@ export default function CountdownHero() {
             style={{
               fontSize: "14px",
               fontFamily: "var(--font-kalam)",
-              color: "#6b7280",
+              color: "var(--muted)",
               margin: "12px 0 0",
               lineHeight: 1.55,
             }}
@@ -197,7 +194,7 @@ export default function CountdownHero() {
                     style={{
                       fontSize: "22px",
                       fontFamily: "var(--font-marker)",
-                      color: "#1a3a10",
+                      color: "var(--green-dark)",
                       fontVariantNumeric: "tabular-nums",
                       lineHeight: 1,
                     }}
@@ -208,7 +205,7 @@ export default function CountdownHero() {
                     style={{
                       fontSize: "9px",
                       fontFamily: "var(--font-kalam)",
-                      color: "#9ca3af",
+                      color: "var(--subtle)",
                       fontWeight: 700,
                       letterSpacing: "0.1em",
                       marginTop: "3px",
@@ -229,7 +226,7 @@ export default function CountdownHero() {
             style={{
               fontSize: "12px",
               fontFamily: "var(--font-kalam)",
-              color: "#9ca3af",
+              color: "var(--subtle)",
               margin: 0,
               textAlign: "center",
             }}
@@ -275,8 +272,8 @@ function SwipeCTA({ onClick }: { onClick: () => void }) {
       style={{
         width: "65%",
         padding: "18px 24px",
-        background: "#1a3a10",
-        border: "2.5px solid #1a3a10",
+        background: "var(--green-dark)",
+        border: "2.5px solid var(--green-dark)",
         color: "#ffffff",
         fontSize: "17px",
         fontFamily: "var(--font-marker)",

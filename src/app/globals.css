@@ -42,9 +42,70 @@
   --nav-bg:       #1a3a10;
   --nav-active:   #f59e0b;
   --nav-inactive: rgba(255,255,255,0.45);
+
+  /* ── Header & bottom nav ────────────────── */
+  --header-bg:          #f4f4f4;
+  --header-text:        #111111;
+  --header-border:      #ebebeb;
+  --bottom-nav-bg:      #ffffff;
+  --bottom-nav-border:  #f0f0f0;
+}
+
+/* ── Dark theme ─────────────────────────────────────────────── */
+[data-theme="dark"] {
+  /* Background */
+  --bg:       #0e100d;
+  --surface:  #161a14;
+  --surface2: #1e241b;
+  --surface3: #252d22;
+
+  /* Forest green — brighter so it reads on dark bg */
+  --green-dark:  #4a8a2a;
+  --green-mid:   #6ab840;
+  --green-light: #8ed060;
+  --green-pale:  #192813;
+
+  /* Gold */
+  --gold:       #f59e0b;
+  --gold-light: #fbbf24;
+  --gold-pale:  #281e00;
+
+  /* Typography */
+  --text:   #f0f0eb;
+  --text2:  #c8c8c3;
+  --muted:  #9ca3af;
+  --subtle: #6b7280;
+
+  /* Borders */
+  --border:  #2e3429;
+  --border2: #212618;
+
+  /* Semantic */
+  --danger:       #ef4444;
+  --danger-pale:  #2d0f0f;
+  --success:      #22c55e;
+  --success-pale: #0f2218;
+
+  /* Nav */
+  --nav-bg:       #0d2008;
+  --nav-active:   #f59e0b;
+  --nav-inactive: rgba(255,255,255,0.45);
+
+  /* Header & bottom nav */
+  --header-bg:          #161a14;
+  --header-text:        #f0f0eb;
+  --header-border:      #1e241b;
+  --bottom-nav-bg:      #161a14;
+  --bottom-nav-border:  #1e241b;
 }
 
 * { box-sizing: border-box; }
+
+/* Smooth theme transition — only on intentional switches */
+html.theme-ready,
+html.theme-ready * {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.15s ease !important;
+}
 
 html, body {
   margin: 0;

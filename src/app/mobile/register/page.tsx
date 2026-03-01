@@ -12,20 +12,20 @@ const SCREENS: { id: Screen; label: string; icon: string }[] = [
   { id: "quest",        label: "Quest",       icon: "🎮" },
 ];
 
-/* Shared style tokens */
+/* Shared style tokens — all backed by CSS custom properties */
 const G = {
-  dark:   "#1a3a10",
-  mid:    "#2d5a1a",
-  light:  "#4a8a2a",
-  pale:   "#e6f0de",
-  gold:   "#f59e0b",
-  border: "#d1d5db",
-  border2:"#e5e7eb",
-  bg:     "#f5f5f0",
-  surface:"#ffffff",
-  text:   "#111111",
-  muted:  "#6b7280",
-  subtle: "#9ca3af",
+  dark:   "var(--green-dark)",
+  mid:    "var(--green-mid)",
+  light:  "var(--green-light)",
+  pale:   "var(--green-pale)",
+  gold:   "var(--gold)",
+  border: "var(--border)",
+  border2:"var(--border2)",
+  bg:     "var(--bg)",
+  surface:"var(--surface)",
+  text:   "var(--text)",
+  muted:  "var(--muted)",
+  subtle: "var(--subtle)",
 };
 
 export default function MobileRegisterPage() {
