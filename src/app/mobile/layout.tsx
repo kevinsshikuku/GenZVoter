@@ -121,6 +121,77 @@ export default function MobileLayout({
         margin: "0 auto",
       }}
     >
+      {/* Top header bar */}
+      <header
+        style={{
+          position: "fixed",
+          top: 0,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "100%",
+          maxWidth: "430px",
+          background: "#f4f4f4",
+          zIndex: 100,
+          padding: "14px 20px 12px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        {/* Logo + subtitle */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
+          <span
+            style={{
+              fontFamily: "var(--font-boogaloo)",
+              fontSize: "28px",
+              lineHeight: 1,
+              color: "#111111",
+            }}
+          >
+            GenZVoter
+          </span>
+          <span
+            style={{
+              fontSize: "13px",
+              fontWeight: 400,
+              color: "#111111",
+              letterSpacing: "0.01em",
+              lineHeight: 1.2,
+            }}
+          >
+            2027 General Election
+          </span>
+        </div>
+
+        {/* Avatar placeholder */}
+        <div
+          style={{
+            width: "42px",
+            height: "42px",
+            borderRadius: "50%",
+            background: "#d1d5db",
+            border: "2px solid #9ca3af",
+            flexShrink: 0,
+          }}
+        />
+
+        {/* Partial-width divider */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: "20px",
+            right: "20px",
+            height: "1px",
+            background: "#ebebeb",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+          }}
+        />
+      </header>
+
+      {/* Spacer for fixed header */}
+      <div style={{ height: "72px", flexShrink: 0 }} />
+
       {/* Pages live here — no page-level scroll; pages manage their own scroll */}
       <main
         style={{ flex: 1, overflow: "hidden" }}

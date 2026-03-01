@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { getCountdown } from "@/lib/countdown";
@@ -50,13 +51,27 @@ export default function CountdownHero() {
         overflow: "hidden",
       }}
     >
-      {/* Confetti-coloured top strip */}
+      {/* Kenya flag — home page only */}
       <div
         style={{
-          height: "5px",
-          background: "linear-gradient(90deg, #2d5a1a 0%, #f59e0b 33%, #dc2626 66%, #1d4ed8 100%)",
+          width: "100%",
+          background: "#ffffff",
+          height: "180px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
         }}
-      />
+      >
+        <Image
+          src="/assets/kenyan-flag.png"
+          alt="Kenya flag"
+          width={430}
+          height={180}
+          style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          priority
+        />
+      </div>
 
       {/* Content */}
       <div
@@ -65,38 +80,13 @@ export default function CountdownHero() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "space-between",
-          padding: "40px 24px 28px",
+          justifyContent: "center",
+          padding: "0 24px 28px",
+          marginTop: "-64px",
+          gap: "24px",
           textAlign: "center",
         }}
       >
-        {/* Kenya badge — hand-drawn pill */}
-        <div
-          className="sk-sm"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            background: "#e6f0de",
-            border: "2px solid #2d5a1a",
-            padding: "5px 14px",
-          }}
-        >
-          <span style={{ fontSize: "14px" }}>🇰🇪</span>
-          <span
-            style={{
-              fontSize: "11px",
-              fontWeight: 700,
-              fontFamily: "var(--font-kalam)",
-              color: "#1a3a10",
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-            }}
-          >
-            Kenya General Elections
-          </span>
-        </div>
-
         {/* Big number block */}
         <div
           style={{
@@ -106,33 +96,6 @@ export default function CountdownHero() {
             gap: "4px",
           }}
         >
-          {/* 2027 — Permanent Marker */}
-          <div
-            style={{
-              fontSize: "clamp(86px, 26vw, 120px)",
-              fontFamily: "var(--font-marker)",
-              lineHeight: 0.85,
-              color: "#111111",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            2027
-          </div>
-
-          <div
-            style={{
-              fontSize: "clamp(11px, 3vw, 14px)",
-              fontFamily: "var(--font-kalam)",
-              fontWeight: 700,
-              color: "#6b7280",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              marginBottom: "8px",
-            }}
-          >
-            ELECTIONS
-          </div>
-
           {/* IN X DAYS */}
           {countdown && (
             <div
@@ -206,19 +169,15 @@ export default function CountdownHero() {
               lineHeight: 1.55,
             }}
           >
-            Uisjifiche, IEBC haitakukula.
+            Ukilalisha usiwai lia aty hakuna change bro!!
           </p>
 
           {/* HRS / MIN / SEC ticker — sketchy container */}
           {countdown && (
             <div
-              className="sk-md"
               style={{
                 display: "flex",
-                gap: "0",
-                background: "#f0f0eb",
-                border: "2px solid #d1d5db",
-                overflow: "hidden",
+                gap: "16px",
                 marginTop: "16px",
               }}
             >
@@ -226,13 +185,12 @@ export default function CountdownHero() {
                 { v: countdown.hours,   l: "HRS" },
                 { v: countdown.minutes, l: "MIN" },
                 { v: countdown.seconds, l: "SEC" },
-              ].map(({ v, l }, i) => (
+              ].map(({ v, l }) => (
                 <div
                   key={l}
                   style={{
                     textAlign: "center",
-                    padding: "10px 18px",
-                    borderRight: i < 2 ? "2px solid #d1d5db" : "none",
+                    padding: "0",
                   }}
                 >
                   <div
@@ -265,7 +223,7 @@ export default function CountdownHero() {
         </div>
 
         {/* CTA */}
-        <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "10px" }}>
+        <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
           <SwipeCTA onClick={() => router.push("/mobile/register")} />
           <p
             style={{
@@ -315,7 +273,7 @@ function SwipeCTA({ onClick }: { onClick: () => void }) {
         onClick();
       }}
       style={{
-        width: "100%",
+        width: "65%",
         padding: "18px 24px",
         background: "#1a3a10",
         border: "2.5px solid #1a3a10",
@@ -332,7 +290,7 @@ function SwipeCTA({ onClick }: { onClick: () => void }) {
         gap: "10px",
       }}
     >
-      SWIPE <span style={{ fontSize: "20px" }}>→</span>
+      Cheki hio List <span style={{ fontSize: "16px" }}>→</span>
     </button>
   );
 }

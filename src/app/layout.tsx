@@ -1,11 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Permanent_Marker, Kalam } from "next/font/google";
+import { Permanent_Marker, Kalam, Boogaloo } from "next/font/google";
 import "./globals.css";
 
 const marker = Permanent_Marker({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-marker",
+  display: "swap",
+});
+
+const boogaloo = Boogaloo({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-boogaloo",
   display: "swap",
 });
 
@@ -47,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${marker.variable} ${kalam.variable}`}>
+    <html lang="en" className={`${marker.variable} ${kalam.variable} ${boogaloo.variable}`}>
       <head>
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
