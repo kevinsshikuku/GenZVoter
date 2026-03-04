@@ -231,7 +231,7 @@ export default function CountdownHero() {
               textAlign: "center",
             }}
           >
-            If you can queue for Nyege Nyege, queue once to vote.
+            Umesota na hauna Kura! Wacha Ufala... Hi kitu ni Once in 5yrs
           </p>
         </div>
       </div>

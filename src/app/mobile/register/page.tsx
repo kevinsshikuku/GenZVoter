@@ -93,7 +93,7 @@ export default function MobileRegisterPage() {
               style={{
                 flexShrink: 0, padding: "8px 12px",
                 borderRadius: "10px 10px 0 0", border: "none",
-                background: screen === s.id ? G.pale : "transparent",
+                background: "transparent",
                 borderBottom: screen === s.id ? `3px solid ${G.dark}` : "3px solid transparent",
                 color: screen === s.id ? G.dark : G.muted,
                 fontSize: "12px", fontWeight: 700, cursor: "pointer",
@@ -127,23 +127,15 @@ function StatusScreen({ onOpenWebview }: { onOpenWebview: () => void }) {
           Am I Registered?
         </h1>
         <p style={{ fontSize: "14px", color: G.muted, margin: 0 }}>
-          Uisjifiche, IEBC haitakukula.
+          Chapia wasee...
         </p>
       </div>
 
-      {/* Card */}
-      <div style={{ background: G.surface, border: `1.5px solid ${G.border2}`, borderRadius: "20px", padding: "24px 20px" }}>
-        <div style={{ fontSize: "44px", textAlign: "center", marginBottom: "12px" }}>🔍</div>
-        <h2 style={{ fontSize: "20px", fontWeight: 800, color: G.text, margin: "0 0 6px", textAlign: "center" }}>
-          Cheki Status Yako
-        </h2>
-        <p style={{ fontSize: "13px", color: G.muted, margin: "0 0 18px", textAlign: "center", lineHeight: 1.5 }}>
-          Verify kwenye IEBC official portal. Utahitaji:
-        </p>
-
+      {/* Card — no background/border, content only */}
+      <div style={{ padding: "0" }}>
         {[
-          { icon: "🪪", label: "ID Number", sub: "National ID au Passport No" },
-          { icon: "🎂", label: "Date of Birth", sub: "Year ya kuzaliwa kwako" },
+          { icon: "🪪", label: "ID Number", sub: "National ID ama Passport No." },
+          { icon: "🎂", label: "Date of Birth", sub: "Date ya kuzaliwa" },
         ].map((item) => (
           <div key={item.label} style={{
             display: "flex", alignItems: "center", gap: "12px",
