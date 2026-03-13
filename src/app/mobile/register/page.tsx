@@ -1,13 +1,41 @@
 "use client";
 
 import { useState } from "react";
-import { REQUIREMENTS, REGISTRATION_CENTRES, GAME_LEVELS } from "@/lib/data";
+import { REQUIREMENTS, GAME_LEVELS } from "@/lib/data";
 
-type Screen = "status" | "centres" | "requirements" | "quest";
+function CheckIcon({ size = 24, color = "#16a34a" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <path d="M12 2.5 C17.6 2.3 21.5 6.4 21.6 12 C21.7 17.7 17.8 21.8 12 21.7 C6.3 21.6 2.4 17.5 2.3 11.9 C2.2 6.3 6.4 2.7 12 2.5" stroke={color} strokeWidth="2.1" strokeLinecap="round" />
+      <path d="M7.5 12.2 C9 13.6 10.4 15.1 11.3 16 C13.2 13.4 15.6 10.8 17.1 9.2" stroke={color} strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ArrowRightIcon({ size = 24, color = "#16a34a" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <path d="M4.5 12.1 C8.8 12 15.2 12 19.5 12" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M14.8 7.5 C16.5 9.2 18.5 11 19.5 12.1 C18.4 13.2 16.4 15.1 14.8 16.6" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function VoteBoxIcon({ size = 18, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <path d="M4.2 10.5 L4 19.8 C4 21 5 21.8 6.1 21.9 L17.9 21.8 C19.1 21.8 20 21 20.1 19.7 L19.9 10.4" stroke={color} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2.5 10.6 L21.5 10.5" stroke={color} strokeWidth="2.1" strokeLinecap="round" />
+      <path d="M9.5 2.5 L7.2 10.5 M14.5 2.5 L16.8 10.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
+      <path d="M9.5 2.4 L14.5 2.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+type Screen = "status" | "requirements" | "quest";
 
 const SCREENS: { id: Screen; label: string; icon: string }[] = [
   { id: "status",       label: "Am I Reg?",   icon: "🔍" },
-  { id: "centres",      label: "Where Tu?",   icon: "📍" },
   { id: "requirements", label: "What I Need", icon: "📋" },
   { id: "quest",        label: "Quest",       icon: "🎮" },
 ];
@@ -85,23 +113,23 @@ export default function MobileRegisterPage() {
         padding: "12px 14px 0",
         boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
       }}>
-        <div style={{ display: "flex", gap: "2px", overflowX: "auto" }} className="no-scrollbar">
+        <div style={{ display: "flex", gap: "0" }} className="no-scrollbar">
           {SCREENS.map((s) => (
             <button
               key={s.id}
               onClick={() => setScreen(s.id)}
               style={{
-                flexShrink: 0, padding: "8px 12px",
+                flex: 1, padding: "8px 12px",
                 borderRadius: "10px 10px 0 0", border: "none",
-                background: screen === s.id ? G.pale : "transparent",
+                background: "transparent",
                 borderBottom: screen === s.id ? `3px solid ${G.dark}` : "3px solid transparent",
                 color: screen === s.id ? G.dark : G.muted,
-                fontSize: "12px", fontWeight: 700, cursor: "pointer",
-                display: "flex", alignItems: "center", gap: "5px",
+                fontSize: "13px", fontWeight: 600, cursor: "pointer",
+                fontFamily: "system-ui, -apple-system, sans-serif",
+                display: "flex", alignItems: "center", justifyContent: "center",
                 transition: "all 0.2s ease", whiteSpace: "nowrap",
               }}
             >
-              <span>{s.icon}</span>
               {s.label}
             </button>
           ))}
@@ -110,7 +138,6 @@ export default function MobileRegisterPage() {
 
       <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch" } as React.CSSProperties} key={screen} className="no-scrollbar slide-in">
         {screen === "status"       && <StatusScreen onOpenWebview={() => setShowWebview(true)} />}
-        {screen === "centres"      && <CentresScreen onNavigate={setScreen} />}
         {screen === "requirements" && <RequirementsScreen onNavigate={setScreen} />}
         {screen === "quest"        && <QuestScreen />}
       </div>
@@ -127,23 +154,15 @@ function StatusScreen({ onOpenWebview }: { onOpenWebview: () => void }) {
           Am I Registered?
         </h1>
         <p style={{ fontSize: "14px", color: G.muted, margin: 0 }}>
-          Uisjifiche, IEBC haitakukula.
+          Chapia wasee...
         </p>
       </div>
 
-      {/* Card */}
-      <div style={{ background: G.surface, border: `1.5px solid ${G.border2}`, borderRadius: "20px", padding: "24px 20px" }}>
-        <div style={{ fontSize: "44px", textAlign: "center", marginBottom: "12px" }}>🔍</div>
-        <h2 style={{ fontSize: "20px", fontWeight: 800, color: G.text, margin: "0 0 6px", textAlign: "center" }}>
-          Cheki Status Yako
-        </h2>
-        <p style={{ fontSize: "13px", color: G.muted, margin: "0 0 18px", textAlign: "center", lineHeight: 1.5 }}>
-          Verify kwenye IEBC official portal. Utahitaji:
-        </p>
-
+      {/* Card — no background/border, content only */}
+      <div style={{ padding: "0" }}>
         {[
-          { icon: "🪪", label: "ID Number", sub: "National ID au Passport No" },
-          { icon: "🎂", label: "Date of Birth", sub: "Year ya kuzaliwa kwako" },
+          { icon: "🪪", label: "ID Number", sub: "National ID ama Passport No." },
+          { icon: "🎂", label: "Date of Birth", sub: "Date ya kuzaliwa" },
         ].map((item) => (
           <div key={item.label} style={{
             display: "flex", alignItems: "center", gap: "12px",
@@ -179,103 +198,6 @@ function StatusScreen({ onOpenWebview }: { onOpenWebview: () => void }) {
   );
 }
 
-/* ─── CENTRES ────────────────────────────────────────────────── */
-function CentresScreen({ onNavigate }: { onNavigate: (s: Screen) => void }) {
-  const [search, setSearch] = useState("");
-  const [expanded, setExpanded] = useState<string | null>(null);
-
-  const filtered = REGISTRATION_CENTRES.filter(
-    (c) =>
-      !search ||
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.county.toLowerCase().includes(search.toLowerCase())
-  );
-
-  return (
-    <div style={{ padding: "24px 20px", background: G.bg }}>
-      <h1 style={{ fontSize: "26px", fontWeight: 900, color: G.text, margin: "0 0 2px", lineHeight: 1.1 }}>
-        Where Tu? 📍
-      </h1>
-      <p style={{ fontSize: "14px", color: G.muted, margin: "0 0 18px" }}>Kuja leo ama jo.</p>
-
-      {/* Search */}
-      <div style={{ position: "relative", marginBottom: "12px" }}>
-        <span style={{ position: "absolute", left: "13px", top: "50%", transform: "translateY(-50%)", fontSize: "15px" }}>🔍</span>
-        <input
-          type="text"
-          placeholder="Search county or name..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            width: "100%", padding: "11px 13px 11px 40px",
-            background: G.surface, border: `1.5px solid ${G.border}`,
-            borderRadius: "12px", color: G.text, fontSize: "14px",
-            outline: "none", boxSizing: "border-box",
-          }}
-        />
-      </div>
-
-      <p style={{ fontSize: "12px", color: G.subtle, marginBottom: "10px" }}>
-        {filtered.length} centres found
-      </p>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "20px" }}>
-        {filtered.map((centre) => (
-          <div
-            key={centre.id}
-            onClick={() => setExpanded(expanded === centre.id ? null : centre.id)}
-            style={{
-              background: G.surface,
-              border: `1.5px solid ${expanded === centre.id ? G.dark : G.border2}`,
-              borderRadius: "14px", padding: "14px 16px",
-              cursor: "pointer", display: "flex", alignItems: "center", gap: "12px",
-            }}
-          >
-            <span style={{
-              width: "8px", height: "8px", borderRadius: "50%",
-              background: "#22c55e", flexShrink: 0, display: "inline-block",
-            }} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ fontSize: "15px", fontWeight: 700, color: G.text, margin: "0 0 2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {centre.name}
-              </p>
-              <p style={{ fontSize: "12px", color: G.muted, margin: 0 }}>
-                {centre.county} · Totally 100% open
-              </p>
-              {expanded === centre.id && (
-                <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: `1px solid ${G.border2}` }}>
-                  <p style={{ fontSize: "13px", color: G.muted, margin: "0 0 3px" }}>📍 {centre.address}</p>
-                  {centre.hours && <p style={{ fontSize: "12px", color: G.muted, margin: 0 }}>🕐 {centre.hours}</p>}
-                </div>
-              )}
-            </div>
-            <div style={{
-              width: "30px", height: "30px", borderRadius: "8px",
-              background: G.pale, border: `1px solid ${G.border}`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              flexShrink: 0,
-            }}>
-              <span style={{ fontSize: "14px", color: G.dark, fontWeight: 800 }}>›</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <button
-        onClick={() => onNavigate("requirements")}
-        style={{
-          width: "100%", padding: "16px", background: G.dark,
-          border: "none", borderRadius: "14px", color: "#fff",
-          fontSize: "15px", fontWeight: 800, cursor: "pointer",
-          letterSpacing: "0.04em",
-        }}
-      >
-        SAWA TUENDE → What I Need
-      </button>
-    </div>
-  );
-}
-
 /* ─── REQUIREMENTS ───────────────────────────────────────────── */
 function RequirementsScreen({ onNavigate }: { onNavigate: (s: Screen) => void }) {
   const [card, setCard] = useState<"register" | "vote">("register");
@@ -298,7 +220,7 @@ function RequirementsScreen({ onNavigate }: { onNavigate: (s: Screen) => void })
               transition: "all 0.2s ease",
             }}
           >
-            {t === "register" ? "🖐️ Register" : "🗳️ Vote"}
+            {t === "register" ? "🖐️ Register" : <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}><VoteBoxIcon size={18} color="currentColor" />Vote</span>}
           </button>
         ))}
       </div>
@@ -311,15 +233,12 @@ function RequirementsScreen({ onNavigate }: { onNavigate: (s: Screen) => void })
         {isReg ? (
           <>
             <h2 style={{ fontSize: "22px", fontWeight: 900, color: G.text, margin: "0 0 2px" }}>Register:</h2>
-            <p style={{ fontSize: "16px", fontWeight: 700, color: G.mid, margin: "0 0 20px" }}>Kitu tu mbili tu:</p>
-            <div style={{ display: "flex", justifyContent: "center", gap: "14px", marginBottom: "18px" }}>
-              {[{ icon: "🪪", label: "National ID" }, { icon: "🔞", label: "18+" }, { icon: "🧠", label: "Sound Mind" }].map((item) => (
-                <div key={item.label} style={{ textAlign: "center" }}>
+            <p style={{ fontSize: "16px", fontWeight: 700, color: G.mid, margin: "0 0 20px" }}>Mambo ni Matatu...</p>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "18px" }}>
+              {[{ icon: "🪪", label: "National ID" }, { icon: "🔞", label: "18+" }, { icon: "🧠", label: "Akili" }].map((item) => (
+                <div key={item.label} style={{ textAlign: "center", flex: 1 }}>
                   <div style={{
-                    width: "60px", height: "60px", borderRadius: "16px",
-                    background: G.pale, border: `1.5px solid ${G.border}`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: "26px", marginBottom: "6px",
+                    fontSize: "52px", marginBottom: "6px", lineHeight: 1,
                   }}>{item.icon}</div>
                   <p style={{ fontSize: "10px", color: G.muted, fontWeight: 700, margin: 0, textTransform: "uppercase", letterSpacing: "0.06em" }}>
                     {item.label}
@@ -333,18 +252,15 @@ function RequirementsScreen({ onNavigate }: { onNavigate: (s: Screen) => void })
           </>
         ) : (
           <>
-            <h2 style={{ fontSize: "22px", fontWeight: 900, color: G.text, margin: "0 0 2px" }}>Glovo ni hard?</h2>
-            <p style={{ fontSize: "18px", fontWeight: 800, color: "#16a34a", margin: "0 0 18px" }}>Voting ni easy! ✅</p>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "16px" }}>
-              {[{ icon: "🪪" }, { arrow: true }, { icon: "✅" }].map((item, i) =>
+            <p style={{ fontSize: "18px", fontWeight: 800, color: "#16a34a", margin: "0 0 18px", display: "flex", alignItems: "center", gap: "6px" }}>Voting ni easy! <CheckIcon size={20} color="#16a34a" /></p>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px", marginBottom: "16px" }}>
+              {[{ icon: "🪪" }, { arrow: true }, { check: true }].map((item, i) =>
                 "arrow" in item ? (
-                  <span key={i} style={{ fontSize: "24px", color: "#16a34a" }}>→</span>
+                  <ArrowRightIcon key={i} size={28} color="#16a34a" />
+                ) : "check" in item ? (
+                  <CheckIcon key={i} size={64} color="#16a34a" />
                 ) : (
-                  <div key={i} style={{
-                    width: "56px", height: "56px", borderRadius: "14px",
-                    background: "#dcfce7", border: "1.5px solid #bbf7d0",
-                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px",
-                  }}>{item.icon}</div>
+                  <div key={i} style={{ width: "64px", height: "64px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "56px", lineHeight: 1 }}>{(item as {icon: string}).icon}</div>
                 )
               )}
             </div>
