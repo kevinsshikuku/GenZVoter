@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { REQUIREMENTS, GAME_LEVELS } from "@/lib/data";
+import BrushButton from "@/components/mobile/BrushButton";
 
 function CheckIcon({ size = 24, color = "#16a34a" }: { size?: number; color?: string }) {
   return (
@@ -166,8 +168,8 @@ function StatusScreen({ onOpenWebview }: { onOpenWebview: () => void }) {
         ].map((item) => (
           <div key={item.label} style={{
             display: "flex", alignItems: "center", gap: "12px",
-            background: G.pale, borderRadius: "12px", padding: "12px 14px",
-            marginBottom: "10px", border: `1px solid ${G.border}`,
+            background: G.pale, borderRadius: "6px", padding: "12px 14px",
+            marginBottom: "10px",
           }}>
             <span style={{ fontSize: "22px" }}>{item.icon}</span>
             <div>
@@ -177,18 +179,9 @@ function StatusScreen({ onOpenWebview }: { onOpenWebview: () => void }) {
           </div>
         ))}
 
-        <button
-          onClick={onOpenWebview}
-          style={{
-            width: "100%", padding: "16px", background: G.dark,
-            border: "none", borderRadius: "14px", color: "#fff",
-            fontSize: "16px", fontWeight: 800, cursor: "pointer",
-            marginTop: "6px", letterSpacing: "0.03em",
-            boxShadow: "0 3px 14px rgba(26,58,16,0.3)",
-          }}
-        >
-          Cheki &gt;
-        </button>
+        <div style={{ display: "flex", justifyContent: "center", marginTop: "6px" }}>
+          <BrushButton label="Cheki Status" onClick={onOpenWebview} />
+        </div>
       </div>
 
       <p style={{ textAlign: "center", fontSize: "12px", color: G.subtle }}>
@@ -204,84 +197,93 @@ function RequirementsScreen({ onNavigate }: { onNavigate: (s: Screen) => void })
   const isReg = card === "register";
 
   return (
-    <div style={{ padding: "28px 20px", background: G.bg, display: "flex", flexDirection: "column", gap: "16px" }}>
+    <div style={{
+      padding: "16px 20px 0",
+      background: G.bg,
+      display: "flex",
+      flexDirection: "column",
+      height: "100%",
+      overflow: "hidden",
+      gap: "10px",
+    }}>
       {/* Toggle */}
-      <div style={{ display: "flex", gap: "10px" }}>
+      <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexShrink: 0 }}>
         {(["register", "vote"] as const).map((t) => (
-          <button
+          <BrushButton
             key={t}
+            label={t === "register" ? "To Register" : "To Vote"}
             onClick={() => setCard(t)}
-            style={{
-              flex: 1, padding: "11px 8px", borderRadius: "12px",
-              border: `2px solid ${card === t ? G.dark : G.border}`,
-              background: card === t ? G.pale : G.surface,
-              color: card === t ? G.dark : G.muted,
-              fontWeight: 800, fontSize: "13px", cursor: "pointer",
-              transition: "all 0.2s ease",
-            }}
-          >
-            {t === "register" ? "🖐️ Register" : <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}><VoteBoxIcon size={18} color="currentColor" />Vote</span>}
-          </button>
+            variant="small"
+            showArrow={false}
+            inactive={card !== t}
+          />
         ))}
       </div>
 
       {/* Card */}
       <div key={card} className="slide-in" style={{
-        background: G.surface, border: `1.5px solid ${G.border2}`,
-        borderRadius: "20px", padding: "26px 20px",
+        padding: "4px 4px 0",
+        display: "flex",
+        flexDirection: "column",
+        flex: 1,
+        minHeight: 0,
       }}>
         {isReg ? (
           <>
-            <h2 style={{ fontSize: "22px", fontWeight: 900, color: G.text, margin: "0 0 2px" }}>Register:</h2>
-            <p style={{ fontSize: "16px", fontWeight: 700, color: G.mid, margin: "0 0 20px" }}>Mambo ni Matatu...</p>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "18px" }}>
+            <h2 style={{ fontSize: "20px", fontWeight: 900, color: G.text, margin: "0 0 2px", flexShrink: 0 }}>Register:</h2>
+            <p style={{ fontSize: "15px", fontWeight: 700, color: G.mid, margin: "0 0 10px", flexShrink: 0 }}>Mambo ni Matatu...</p>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", flexShrink: 0 }}>
               {[{ icon: "🪪", label: "National ID" }, { icon: "🔞", label: "18+" }, { icon: "🧠", label: "Akili" }].map((item) => (
                 <div key={item.label} style={{ textAlign: "center", flex: 1 }}>
-                  <div style={{
-                    fontSize: "52px", marginBottom: "6px", lineHeight: 1,
-                  }}>{item.icon}</div>
+                  <div style={{ fontSize: "42px", marginBottom: "4px", lineHeight: 1 }}>{item.icon}</div>
                   <p style={{ fontSize: "10px", color: G.muted, fontWeight: 700, margin: 0, textTransform: "uppercase", letterSpacing: "0.06em" }}>
                     {item.label}
                   </p>
                 </div>
               ))}
             </div>
-            <p style={{ fontSize: "14px", color: G.muted, textAlign: "center", margin: "0 0 22px", lineHeight: 1.5 }}>
+            <p style={{ fontSize: "13px", color: G.muted, textAlign: "center", margin: "0 0 8px", lineHeight: 1.4, flexShrink: 0 }}>
               National ID or valid passport. Not registered elsewhere.
             </p>
           </>
         ) : (
           <>
-            <p style={{ fontSize: "18px", fontWeight: 800, color: "#16a34a", margin: "0 0 18px", display: "flex", alignItems: "center", gap: "6px" }}>Voting ni easy! <CheckIcon size={20} color="#16a34a" /></p>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "16px", marginBottom: "16px" }}>
-              {[{ icon: "🪪" }, { arrow: true }, { check: true }].map((item, i) =>
-                "arrow" in item ? (
-                  <ArrowRightIcon key={i} size={28} color="#16a34a" />
-                ) : "check" in item ? (
-                  <CheckIcon key={i} size={64} color="#16a34a" />
-                ) : (
-                  <div key={i} style={{ width: "64px", height: "64px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "56px", lineHeight: 1 }}>{(item as {icon: string}).icon}</div>
-                )
-              )}
-            </div>
-            <p style={{ fontSize: "14px", color: G.muted, textAlign: "center", margin: "0 0 20px", lineHeight: 1.6 }}>
-              Twanga ID au passport kwa polling station.<br />
+            <p style={{ fontSize: "18px", fontWeight: 800, color: "#16a34a", margin: "0 0 4px", flexShrink: 0 }}>Voting ni easy man!</p>
+            <p style={{ fontSize: "13px", color: G.muted, textAlign: "center", margin: "0 0 8px", lineHeight: 1.5, flexShrink: 0 }}>
+              Tokea na ID au passport kwa polling station.<br />
               <strong style={{ color: "#16a34a" }}>Slip si lazima.</strong>
             </p>
           </>
         )}
 
-        <button
-          onClick={() => isReg ? setCard("vote") : onNavigate("quest")}
-          style={{
-            width: "100%", padding: "16px", background: G.dark,
-            border: "none", borderRadius: "14px", color: "#fff",
-            fontSize: "15px", fontWeight: 800, cursor: "pointer",
-            letterSpacing: "0.06em", boxShadow: "0 3px 14px rgba(26,58,16,0.3)",
-          }}
-        >
-          SAWA TUENDE →
-        </button>
+        {/* Image fills remaining space */}
+        <div style={{
+          flex: 1,
+          minHeight: 0,
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "center",
+          marginLeft: "-20px",
+          marginRight: "-20px",
+          marginBottom: "-16px",
+          overflow: "hidden",
+        }}>
+          <Image
+            src={isReg ? "/assets/Genz3.png" : "/assets/Genz2.png"}
+            alt="Gen Z youth holding Kenyan flag"
+            width={isReg ? 1105 : 500}
+            height={isReg ? 1234 : 340}
+            style={{
+              width: isReg ? "90%" : "100%",
+              height: "100%",
+              objectFit: "contain",
+              objectPosition: "bottom center",
+              display: "block",
+              ...(isReg ? {} : { transform: "scale(1.18)", transformOrigin: "center center" }),
+            }}
+            priority
+          />
+        </div>
       </div>
 
       {/* suppress unused import */}
@@ -452,18 +454,9 @@ function QuestScreen() {
           </button>
         </div>
       ) : (
-        <button
-          onClick={handlePledge}
-          className="pulse-ring"
-          style={{
-            width: "100%", padding: "18px", background: G.dark,
-            border: "none", borderRadius: "16px", color: "#fff",
-            fontSize: "15px", fontWeight: 800, cursor: "pointer",
-            boxShadow: "0 5px 20px rgba(26,58,16,0.35)", letterSpacing: "0.04em",
-          }}
-        >
-          Sawa, Nitaenda Kupiga Kura 2027 🗳️
-        </button>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <BrushButton label="Nitaenda Kupiga Kura 2027 🗳️" onClick={handlePledge} />
+        </div>
       )}
     </div>
   );

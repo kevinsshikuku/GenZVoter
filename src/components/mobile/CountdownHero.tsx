@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { getCountdown } from "@/lib/countdown";
 import type { CountdownValues } from "@/lib/countdown";
+import BrushButton from "@/components/mobile/BrushButton";
 
 export default function CountdownHero() {
   const [countdown, setCountdown] = useState<CountdownValues | null>(null);
@@ -221,7 +222,7 @@ export default function CountdownHero() {
 
         {/* CTA */}
         <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
-          <SwipeCTA onClick={() => router.push("/mobile/register")} />
+          <BrushButton label="Cheki hio List" onClick={() => router.push("/mobile/register")} wiggleOnIdle />
           <p
             style={{
               fontSize: "12px",
@@ -236,58 +237,5 @@ export default function CountdownHero() {
         </div>
       </div>
     </div>
-  );
-}
-
-function SwipeCTA({ onClick }: { onClick: () => void }) {
-  const [wiggling, setWiggling] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const usedRef = useRef(false);
-
-  useEffect(() => {
-    function schedule() {
-      timerRef.current = setTimeout(() => {
-        if (!usedRef.current) {
-          setWiggling(true);
-          setTimeout(() => {
-            setWiggling(false);
-            schedule();
-          }, 800);
-        }
-      }, 3000);
-    }
-    schedule();
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
-
-  return (
-    <button
-      className={`sk-btn ${wiggling ? "wiggle" : ""}`}
-      onClick={() => {
-        usedRef.current = true;
-        onClick();
-      }}
-      style={{
-        width: "65%",
-        padding: "18px 24px",
-        background: "var(--green-dark)",
-        border: "2.5px solid var(--green-dark)",
-        color: "#ffffff",
-        fontSize: "17px",
-        fontFamily: "var(--font-marker)",
-        cursor: "pointer",
-        letterSpacing: "0.06em",
-        /* Hard drop shadow = hand-drawn stamp feel */
-        boxShadow: "4px 4px 0px #0d2008",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "10px",
-      }}
-    >
-      Cheki hio List <span style={{ fontSize: "16px" }}>→</span>
-    </button>
   );
 }
