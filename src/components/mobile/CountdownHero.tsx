@@ -86,6 +86,7 @@ export default function CountdownHero() {
           alignItems: "center",
           justifyContent: "space-evenly",
           padding: "0 20px 8px",
+          marginTop: "-80px",
           textAlign: "center",
           overflow: "hidden",
         }}
