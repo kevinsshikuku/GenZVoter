@@ -63,7 +63,7 @@ export default function MobileRegisterPage() {
   const [showWebview, setShowWebview] = useState(false);
 
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", background: G.bg, overflow: "hidden" }}>
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", background: G.bg, overflowX: "hidden", overflowY: screen === "requirements" ? "visible" : "hidden" }}>
 
       {/* IEBC webview — bottom cleared for sticky nav */}
       {showWebview && (
@@ -138,7 +138,7 @@ export default function MobileRegisterPage() {
         </div>
       </div>
 
-      <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch" } as React.CSSProperties} key={screen} className="no-scrollbar slide-in">
+      <div style={{ flex: 1, overflow: screen === "requirements" ? "hidden" : "auto", WebkitOverflowScrolling: "touch", display: "flex", flexDirection: "column" } as React.CSSProperties} key={screen} className="no-scrollbar slide-in">
         {screen === "status"       && <StatusScreen onOpenWebview={() => setShowWebview(true)} />}
         {screen === "requirements" && <RequirementsScreen onNavigate={setScreen} />}
         {screen === "quest"        && <QuestScreen />}
@@ -202,7 +202,8 @@ function RequirementsScreen({ onNavigate }: { onNavigate: (s: Screen) => void })
       background: G.bg,
       display: "flex",
       flexDirection: "column",
-      height: "100%",
+      flex: 1,
+      minHeight: 0,
       overflow: "hidden",
       gap: "10px",
     }}>
@@ -256,30 +257,24 @@ function RequirementsScreen({ onNavigate }: { onNavigate: (s: Screen) => void })
           </>
         )}
 
-        {/* Image fills remaining space */}
+        {/* Image fills remaining space + extends 64px into nav spacer so no gap shows */}
         <div style={{
           flex: 1,
           minHeight: 0,
-          display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "center",
+          position: "relative",
           marginLeft: "-20px",
           marginRight: "-20px",
-          marginBottom: "-16px",
+          marginBottom: "-64px",
           overflow: "hidden",
         }}>
           <Image
             src={isReg ? "/assets/Genz3.png" : "/assets/Genz2.png"}
             alt="Gen Z youth holding Kenyan flag"
-            width={isReg ? 1105 : 500}
-            height={isReg ? 1234 : 340}
+            fill
             style={{
-              width: isReg ? "90%" : "100%",
-              height: "100%",
-              objectFit: "contain",
-              objectPosition: "bottom center",
+              objectFit: "cover",
+              objectPosition: isReg ? "top center" : "center center",
               display: "block",
-              ...(isReg ? {} : { transform: "scale(1.18)", transformOrigin: "center center" }),
             }}
             priority
           />
@@ -334,12 +329,14 @@ function QuestScreen() {
   };
 
   return (
-    <div style={{ padding: "24px 20px", background: G.bg }}>
-      <h1 style={{ fontSize: "24px", fontWeight: 900, color: G.text, margin: "0 0 2px" }}>Registration Quest 🎮</h1>
-      <p style={{ fontSize: "13px", color: G.muted, margin: "0 0 16px" }}>4 levels. Less steps than creating a TikTok account.</p>
-
-      {/* Progress */}
-      <div style={{ background: G.surface, border: `1.5px solid ${G.border2}`, borderRadius: "16px", padding: "14px 16px", marginBottom: "16px" }}>
+    <div style={{ padding: "0 20px 24px", background: G.bg }}>
+      {/* Progress — sticky at top */}
+      <div style={{
+        position: "sticky", top: 0, zIndex: 10,
+        background: G.bg,
+        padding: "14px 0 10px",
+        marginBottom: "4px",
+      }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
           <span style={{ fontSize: "13px", fontWeight: 700, color: G.muted }}>
             Adulting Ni Gome Tu! <span style={{ color: pct === 100 ? "#16a34a" : G.dark }}>{pct}%</span>
@@ -364,6 +361,9 @@ function QuestScreen() {
           ))}
         </div>
       </div>
+
+      <h1 style={{ fontSize: "24px", fontWeight: 900, color: G.text, margin: "0 0 2px" }}>Registration Quest 🎮</h1>
+      <p style={{ fontSize: "13px", color: G.muted, margin: "0 0 16px" }}>4 levels. Less steps than creating a TikTok account.</p>
 
       {/* Levels */}
       <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "18px" }}>
@@ -420,16 +420,16 @@ function QuestScreen() {
                     </div>
                   )}
                   {!isCompleted && (
-                    <button
-                      onClick={(e) => { e.stopPropagation(); completeLevel(level); }}
-                      style={{
-                        width: "100%", padding: "13px", background: G.dark,
-                        border: "none", borderRadius: "12px",
-                        color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer",
-                      }}
-                    >
-                      Mark Level {level.id} Done ✅
-                    </button>
+                    <div style={{ display: "flex", justifyContent: "center" }} onClick={(e) => e.stopPropagation()}>
+                      <BrushButton
+                        label={`Mark Level ${level.id} Done ✅`}
+                        onClick={() => completeLevel(level)}
+                        variant="small"
+                        showArrow={false}
+                        width="min(100%, 280px)"
+                        fontSize="clamp(11px, 3.2vw, 13px)"
+                      />
+                    </div>
                   )}
                 </div>
               )}
@@ -444,18 +444,23 @@ function QuestScreen() {
           <p style={{ fontSize: "28px", margin: "0 0 8px" }}>🎉</p>
           <p style={{ fontSize: "16px", fontWeight: 800, color: G.text, margin: "0 0 5px" }}>Umesign! Respect. 🫡</p>
           <p style={{ fontSize: "13px", color: G.muted, margin: "0 0 14px" }}>Screenshot hii na utume squad yako.</p>
-          <button
-            onClick={() => {
-              if (navigator.share) navigator.share({ title: "GenZ Voter 2027", text: "Nimejicommit kupiga kura 2027. Toke na mbogi 👀", url: window.location.origin });
-            }}
-            style={{ padding: "12px 20px", background: G.dark, border: "none", borderRadius: "12px", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer" }}
-          >
-            Share to Squad 💬
-          </button>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <BrushButton
+              label="Share na Squadi"
+              variant="small"
+              showArrow={false}
+              width="min(100%, 260px)"
+              fontSize="clamp(11px, 3.2vw, 13px)"
+              textTransform="capitalize"
+              onClick={() => {
+                if (navigator.share) navigator.share({ title: "GenZ Voter 2027", text: "Nimejicommit kupiga kura 2027. Toke na mbogi 👀", url: window.location.origin });
+              }}
+            />
+          </div>
         </div>
       ) : (
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <BrushButton label="Nitaenda Kupiga Kura 2027 🗳️" onClick={handlePledge} />
+          <BrushButton label="Occupy Polling Station 🗳️" onClick={handlePledge} />
         </div>
       )}
     </div>
