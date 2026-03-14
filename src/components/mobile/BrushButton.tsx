@@ -23,6 +23,10 @@ interface BrushButtonProps {
   subtitle?: string;
   /** Override the brush image height (default: auto from aspect ratio) */
   height?: string;
+  /** Extra style applied to the outer button element */
+  style?: React.CSSProperties;
+  /** Text transform for the label (default: "uppercase") */
+  textTransform?: React.CSSProperties["textTransform"];
 }
 
 export default function BrushButton({
@@ -36,6 +40,8 @@ export default function BrushButton({
   variant = "default",
   subtitle,
   height,
+  style: styleProp,
+  textTransform: textTransformProp = "uppercase",
 }: BrushButtonProps) {
   const [wiggling, setWiggling] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -66,7 +72,8 @@ export default function BrushButton({
   const imgH = isSmall ? 274 : 344;
   // Light mode: dark stroke → white text. Dark mode: inverted (light) stroke → dark green text
   const textColor = theme === "dark" ? "var(--green-dark)" : "#ffffff";
-  const imgFilter = theme === "dark" ? "invert(1)" : undefined;
+  const shadow = "drop-shadow(0px 4px 8px rgba(0,0,0,0.28)) drop-shadow(0px 1px 3px rgba(0,0,0,0.18))";
+  const imgFilter = theme === "dark" ? `invert(1) ${shadow}` : shadow;
   const defaultWidth = isSmall ? "calc(50% - 5px)" : "min(80vw, 300px)";
   const resolvedWidth = width ?? defaultWidth;
 
@@ -85,6 +92,7 @@ export default function BrushButton({
         position: "relative",
         opacity: inactive ? 0.45 : 1,
         transition: "opacity 0.2s ease",
+        ...styleProp,
       }}
     >
       <Image
@@ -118,10 +126,10 @@ export default function BrushButton({
           alignItems: "center",
           gap: "6px",
           fontSize: fontSize ?? (isSmall ? "clamp(12px, 3.5vw, 15px)" : "clamp(16px, 5vw, 22px)"),
-          fontFamily: "var(--font-marker)",
+          fontFamily: "system-ui, -apple-system, sans-serif",
           fontWeight: 900,
-          letterSpacing: "0.04em",
-          textTransform: "uppercase",
+          letterSpacing: "0.02em",
+          textTransform: textTransformProp,
           lineHeight: 1,
         }}>
           {label}{showArrow && <span style={{ fontSize: "0.85em" }}> →</span>}
@@ -129,12 +137,12 @@ export default function BrushButton({
         {subtitle && (
           <span style={{
             fontSize: "clamp(9px, 2.5vw, 11px)",
-            fontFamily: "var(--font-kalam)",
+            fontFamily: "system-ui, -apple-system, sans-serif",
             fontWeight: 700,
-            letterSpacing: "0.01em",
+            letterSpacing: "0em",
             textTransform: "none",
             lineHeight: 1.2,
-            opacity: 0.85,
+            opacity: 0.9,
             maxWidth: "80%",
             textAlign: "center",
           }}>

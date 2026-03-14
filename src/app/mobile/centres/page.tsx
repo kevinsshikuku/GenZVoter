@@ -94,37 +94,30 @@ export default function CentresPage() {
         <div
           style={{
             background: activeCat.accent,
-            padding: "20px 20px 16px",
+            padding: "8px 16px 10px",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
           }}
         >
           {/* Back */}
-          <button
+          <BrushButton
+            label="← Back"
             onClick={() => { setView("categories"); setActiveType(null); }}
-            style={{
-              background: "rgba(255,255,255,0.15)",
-              border: "1.5px solid rgba(255,255,255,0.3)",
-              borderRadius: "6px 20px 5px 18px / 18px 5px 20px 6px",
-              color: "#fff",
-              fontFamily: "var(--font-kalam)",
-              fontSize: "13px",
-              fontWeight: 700,
-              padding: "5px 14px",
-              cursor: "pointer",
-              marginBottom: "10px",
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-            }}
-          >
-            ← All Centres
-          </button>
+            variant="small"
+            showArrow={false}
+            fontSize="clamp(9px, 2.5vw, 11px)"
+            width="clamp(80px, 22vw, 110px)"
+            height="34px"
+          />
 
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span style={{ fontSize: "26px" }}>{activeCat.icon}</span>
+          {/* Title */}
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1, minWidth: 0 }}>
+            <span style={{ fontSize: "20px", flexShrink: 0 }}>{activeCat.icon}</span>
             <div>
               <h1
                 style={{
-                  fontSize: "22px",
+                  fontSize: "17px",
                   fontFamily: "var(--font-marker)",
                   color: "#ffffff",
                   margin: 0,
@@ -135,10 +128,10 @@ export default function CentresPage() {
               </h1>
               <p
                 style={{
-                  fontSize: "12px",
+                  fontSize: "11px",
                   fontFamily: "var(--font-kalam)",
                   color: "rgba(255,255,255,0.75)",
-                  margin: "3px 0 0",
+                  margin: "1px 0 0",
                 }}
               >
                 {filteredCentres.length} centre{filteredCentres.length !== 1 ? "s" : ""}
@@ -147,26 +140,6 @@ export default function CentresPage() {
           </div>
         </div>
 
-        {/* Description band */}
-        <div
-          style={{
-            background: activeCat.accentPale,
-            borderBottom: `2px solid ${G.border}`,
-            padding: "10px 20px",
-          }}
-        >
-          <p
-            style={{
-              fontSize: "12px",
-              fontFamily: "var(--font-kalam)",
-              color: activeCat.accent,
-              margin: 0,
-              fontWeight: 700,
-            }}
-          >
-            {activeCat.description}
-          </p>
-        </div>
 
         {/* Centre list */}
         <div style={{ flex: 1, overflowY: "auto", padding: "14px 16px 20px" }} className="no-scrollbar">
@@ -230,8 +203,8 @@ export default function CentresPage() {
       </div>
 
       {/* 3 category buttons */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "center" }}>
-        {CATEGORIES.map((cat) => {
+      <div style={{ display: "flex", flexDirection: "column", gap: "0", alignItems: "center" }}>
+        {CATEGORIES.map((cat, i) => {
           const count = REGISTRATION_CENTRES.filter((c) => c.type === cat.type).length;
           return (
             <BrushButton
@@ -240,8 +213,9 @@ export default function CentresPage() {
               subtitle={cat.description}
               onClick={() => { setActiveType(cat.type); setView("list"); }}
               width="min(96vw, 400px)"
-              fontSize="clamp(16px, 4.5vw, 22px)"
-              height="clamp(160px, 40vw, 200px)"
+              fontSize="clamp(14px, 4vw, 20px)"
+              height="clamp(100px, calc((100dvh - 266px) / 3), 170px)"
+              style={i > 0 ? { marginTop: "-30px" } : undefined}
             />
           );
         })}
