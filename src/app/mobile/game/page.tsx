@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { GAME_LEVELS } from "@/lib/data";
 import type { GameLevel } from "@/lib/types";
+import BrushButton from "@/components/mobile/BrushButton";
 
 export default function MobileGamePage() {
   const [completedLevels, setCompletedLevels] = useState<number[]>([]);
@@ -383,24 +384,9 @@ function PledgeSection() {
           <p style={{ fontSize: "14px", color: "#94a3b8", margin: "0 0 20px", lineHeight: 1.6 }}>
             Tap below. Get confetti. Screenshot na utume squad.
           </p>
-          <button
-            onClick={handlePledge}
-            className="pulse-ring"
-            style={{
-              width: "100%",
-              padding: "18px",
-              background: "linear-gradient(135deg, #ec4899, #a855f7)",
-              border: "none",
-              borderRadius: "16px",
-              color: "#fff",
-              fontSize: "16px",
-              fontWeight: 800,
-              cursor: "pointer",
-              boxShadow: "0 6px 24px rgba(236,72,153,0.5)",
-            }}
-          >
-            Sawa, Nitaenda Kupiga Kura 2027 🗳️
-          </button>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <BrushButton label="Nitaenda Kupiga Kura 2027 🗳️" onClick={handlePledge} />
+          </div>
         </>
       )}
     </div>
