@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { REGISTRATION_CENTRES } from "@/lib/data";
 import type { RegistrationCentre } from "@/lib/types";
+import BrushButton from "@/components/mobile/BrushButton";
 
 const G = {
   dark:    "var(--green-dark)",
@@ -93,37 +94,30 @@ export default function CentresPage() {
         <div
           style={{
             background: activeCat.accent,
-            padding: "20px 20px 16px",
+            padding: "8px 16px 10px",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
           }}
         >
           {/* Back */}
-          <button
+          <BrushButton
+            label="← Back"
             onClick={() => { setView("categories"); setActiveType(null); }}
-            style={{
-              background: "rgba(255,255,255,0.15)",
-              border: "1.5px solid rgba(255,255,255,0.3)",
-              borderRadius: "6px 20px 5px 18px / 18px 5px 20px 6px",
-              color: "#fff",
-              fontFamily: "var(--font-kalam)",
-              fontSize: "13px",
-              fontWeight: 700,
-              padding: "5px 14px",
-              cursor: "pointer",
-              marginBottom: "10px",
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-            }}
-          >
-            ← All Centres
-          </button>
+            variant="small"
+            showArrow={false}
+            fontSize="clamp(9px, 2.5vw, 11px)"
+            width="clamp(80px, 22vw, 110px)"
+            height="34px"
+          />
 
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span style={{ fontSize: "26px" }}>{activeCat.icon}</span>
+          {/* Title */}
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1, minWidth: 0 }}>
+            <span style={{ fontSize: "20px", flexShrink: 0 }}>{activeCat.icon}</span>
             <div>
               <h1
                 style={{
-                  fontSize: "22px",
+                  fontSize: "17px",
                   fontFamily: "var(--font-marker)",
                   color: "#ffffff",
                   margin: 0,
@@ -134,10 +128,10 @@ export default function CentresPage() {
               </h1>
               <p
                 style={{
-                  fontSize: "12px",
+                  fontSize: "11px",
                   fontFamily: "var(--font-kalam)",
                   color: "rgba(255,255,255,0.75)",
-                  margin: "3px 0 0",
+                  margin: "1px 0 0",
                 }}
               >
                 {filteredCentres.length} centre{filteredCentres.length !== 1 ? "s" : ""}
@@ -146,26 +140,6 @@ export default function CentresPage() {
           </div>
         </div>
 
-        {/* Description band */}
-        <div
-          style={{
-            background: activeCat.accentPale,
-            borderBottom: `2px solid ${G.border}`,
-            padding: "10px 20px",
-          }}
-        >
-          <p
-            style={{
-              fontSize: "12px",
-              fontFamily: "var(--font-kalam)",
-              color: activeCat.accent,
-              margin: 0,
-              fontWeight: 700,
-            }}
-          >
-            {activeCat.description}
-          </p>
-        </div>
 
         {/* Centre list */}
         <div style={{ flex: 1, overflowY: "auto", padding: "14px 16px 20px" }} className="no-scrollbar">
@@ -228,112 +202,21 @@ export default function CentresPage() {
         </p>
       </div>
 
-      {/* 3 category cards */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-        {CATEGORIES.map((cat) => {
+      {/* 3 category buttons */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "0", alignItems: "center" }}>
+        {CATEGORIES.map((cat, i) => {
           const count = REGISTRATION_CENTRES.filter((c) => c.type === cat.type).length;
           return (
-            <button
+            <BrushButton
               key={cat.type}
+              label={`${cat.icon}  ${cat.shortLabel} (${count})`}
+              subtitle={cat.description}
               onClick={() => { setActiveType(cat.type); setView("list"); }}
-              style={{
-                width: "100%",
-                background: G.surface,
-                border: `2.5px solid ${cat.accent}`,
-                borderRadius: cat.sketchBorder,
-                padding: "20px 18px",
-                cursor: "pointer",
-                textAlign: "left",
-                boxShadow: `5px 5px 0px ${cat.shadowColor}`,
-                display: "flex",
-                alignItems: "center",
-                gap: "16px",
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
-              {/* Accent top bar */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0, left: 0, right: 0,
-                  height: "4px",
-                  background: cat.accent,
-                }}
-              />
-
-              {/* Icon in pale circle */}
-              <div
-                style={{
-                  width: "52px",
-                  height: "52px",
-                  borderRadius: "50%",
-                  background: cat.accentPale,
-                  border: `2px solid ${cat.accent}`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "24px",
-                  flexShrink: 0,
-                }}
-              >
-                {cat.icon}
-              </div>
-
-              {/* Text block */}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <h2
-                  style={{
-                    fontSize: "17px",
-                    fontFamily: "var(--font-marker)",
-                    color: cat.accent,
-                    margin: "0 0 4px",
-                    lineHeight: 1.15,
-                  }}
-                >
-                  {cat.label}
-                </h2>
-                <p
-                  style={{
-                    fontSize: "12px",
-                    fontFamily: "var(--font-kalam)",
-                    color: G.muted,
-                    margin: 0,
-                    lineHeight: 1.4,
-                    whiteSpace: "normal",
-                  }}
-                >
-                  {cat.description}
-                </p>
-              </div>
-
-              {/* Count + arrow */}
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px", flexShrink: 0 }}>
-                <span
-                  style={{
-                    fontSize: "11px",
-                    fontFamily: "var(--font-kalam)",
-                    fontWeight: 700,
-                    background: cat.accentPale,
-                    color: cat.accent,
-                    border: `1.5px solid ${cat.accent}`,
-                    borderRadius: "12px 4px 10px 4px / 4px 10px 4px 12px",
-                    padding: "2px 10px",
-                  }}
-                >
-                  {count}
-                </span>
-                <span
-                  style={{
-                    fontSize: "18px",
-                    color: cat.accent,
-                    fontFamily: "var(--font-marker)",
-                  }}
-                >
-                  →
-                </span>
-              </div>
-            </button>
+              width="min(96vw, 400px)"
+              fontSize="clamp(14px, 4vw, 20px)"
+              height="clamp(100px, calc((100dvh - 266px) / 3), 170px)"
+              style={i > 0 ? { marginTop: "-30px" } : undefined}
+            />
           );
         })}
       </div>
