@@ -19,6 +19,10 @@ interface BrushButtonProps {
   fontSize?: string;
   /** "default" uses the large brush assets; "small" uses SmallLight/DarkButton assets */
   variant?: "default" | "small";
+  /** Optional smaller subtitle line rendered inside the button below the label */
+  subtitle?: string;
+  /** Override the brush image height (default: auto from aspect ratio) */
+  height?: string;
 }
 
 export default function BrushButton({
@@ -30,6 +34,8 @@ export default function BrushButton({
   inactive = false,
   fontSize,
   variant = "default",
+  subtitle,
+  height,
 }: BrushButtonProps) {
   const [wiggling, setWiggling] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -51,17 +57,16 @@ export default function BrushButton({
   }, [wiggleOnIdle]);
 
   // Pre-cropped button assets
+  // LightModeButton_btn.png = dark maroon stroke (visible on light bg)
+  // In dark mode we reuse it with invert(1) → light cream stroke (visible on dark bg)
+  // SmallLightButton_btn.png same approach for small variant
   const isSmall = variant === "small";
-  const btnSrc = isSmall
-    ? (theme === "dark" ? "/assets/SmallDarkButton_btn.png" : "/assets/SmallLightButton_btn.png")
-    : (theme === "dark" ? "/assets/DarkModeButton_btn.png" : "/assets/LightModeButton_btn.png");
-  // SmallLight/Dark are both 683×274; large: Light=1175×344, Dark=814×276
-  const imgW = isSmall ? 683 : (theme === "light" ? 1175 : 814);
-  const imgH = isSmall ? 274 : (theme === "light" ? 344 : 276);
-  // Small buttons: dark stroke on white bg → white text; grey stroke on dark bg → dark text
-  const textColor = isSmall
-    ? (theme === "dark" ? "#1a3a10" : "#ffffff")
-    : (theme === "light" ? "#ffffff" : "var(--green-dark)");
+  const btnSrc = isSmall ? "/assets/SmallLightButton_btn.png" : "/assets/LightModeButton_btn.png";
+  const imgW = isSmall ? 683 : 1175;
+  const imgH = isSmall ? 274 : 344;
+  // Light mode: dark stroke → white text. Dark mode: inverted (light) stroke → dark green text
+  const textColor = theme === "dark" ? "var(--green-dark)" : "#ffffff";
+  const imgFilter = theme === "dark" ? "invert(1)" : undefined;
   const defaultWidth = isSmall ? "calc(50% - 5px)" : "min(80vw, 300px)";
   const resolvedWidth = width ?? defaultWidth;
 
@@ -89,9 +94,9 @@ export default function BrushButton({
         height={imgH}
         style={{
           width: "100%",
-          height: "auto",
+          height: height ?? "auto",
           display: "block",
-          filter: isSmall ? "drop-shadow(0px 3px 5px rgba(0,0,0,0.35))" : undefined,
+          filter: imgFilter,
         }}
         priority
       />
@@ -100,20 +105,42 @@ export default function BrushButton({
           position: "absolute",
           inset: 0,
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: "6px",
+          gap: "3px",
           color: textColor,
+          pointerEvents: "none",
+        }}
+      >
+        <span style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "6px",
           fontSize: fontSize ?? (isSmall ? "clamp(12px, 3.5vw, 15px)" : "clamp(16px, 5vw, 22px)"),
           fontFamily: "var(--font-marker)",
           fontWeight: 900,
           letterSpacing: "0.04em",
           textTransform: "uppercase",
-          pointerEvents: "none",
           lineHeight: 1,
-        }}
-      >
-        {label}{showArrow && <span style={{ fontSize: "0.85em" }}> →</span>}
+        }}>
+          {label}{showArrow && <span style={{ fontSize: "0.85em" }}> →</span>}
+        </span>
+        {subtitle && (
+          <span style={{
+            fontSize: "clamp(9px, 2.5vw, 11px)",
+            fontFamily: "var(--font-kalam)",
+            fontWeight: 700,
+            letterSpacing: "0.01em",
+            textTransform: "none",
+            lineHeight: 1.2,
+            opacity: 0.85,
+            maxWidth: "80%",
+            textAlign: "center",
+          }}>
+            {subtitle}
+          </span>
+        )}
       </span>
     </button>
   );

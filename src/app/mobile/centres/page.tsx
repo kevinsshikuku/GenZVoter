@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { REGISTRATION_CENTRES } from "@/lib/data";
 import type { RegistrationCentre } from "@/lib/types";
+import BrushButton from "@/components/mobile/BrushButton";
 
 const G = {
   dark:    "var(--green-dark)",
@@ -228,112 +229,20 @@ export default function CentresPage() {
         </p>
       </div>
 
-      {/* 3 category cards */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      {/* 3 category buttons */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "center" }}>
         {CATEGORIES.map((cat) => {
           const count = REGISTRATION_CENTRES.filter((c) => c.type === cat.type).length;
           return (
-            <button
+            <BrushButton
               key={cat.type}
+              label={`${cat.icon}  ${cat.shortLabel} (${count})`}
+              subtitle={cat.description}
               onClick={() => { setActiveType(cat.type); setView("list"); }}
-              style={{
-                width: "100%",
-                background: G.surface,
-                border: `2.5px solid ${cat.accent}`,
-                borderRadius: cat.sketchBorder,
-                padding: "20px 18px",
-                cursor: "pointer",
-                textAlign: "left",
-                boxShadow: `5px 5px 0px ${cat.shadowColor}`,
-                display: "flex",
-                alignItems: "center",
-                gap: "16px",
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
-              {/* Accent top bar */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0, left: 0, right: 0,
-                  height: "4px",
-                  background: cat.accent,
-                }}
-              />
-
-              {/* Icon in pale circle */}
-              <div
-                style={{
-                  width: "52px",
-                  height: "52px",
-                  borderRadius: "50%",
-                  background: cat.accentPale,
-                  border: `2px solid ${cat.accent}`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "24px",
-                  flexShrink: 0,
-                }}
-              >
-                {cat.icon}
-              </div>
-
-              {/* Text block */}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <h2
-                  style={{
-                    fontSize: "17px",
-                    fontFamily: "var(--font-marker)",
-                    color: cat.accent,
-                    margin: "0 0 4px",
-                    lineHeight: 1.15,
-                  }}
-                >
-                  {cat.label}
-                </h2>
-                <p
-                  style={{
-                    fontSize: "12px",
-                    fontFamily: "var(--font-kalam)",
-                    color: G.muted,
-                    margin: 0,
-                    lineHeight: 1.4,
-                    whiteSpace: "normal",
-                  }}
-                >
-                  {cat.description}
-                </p>
-              </div>
-
-              {/* Count + arrow */}
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px", flexShrink: 0 }}>
-                <span
-                  style={{
-                    fontSize: "11px",
-                    fontFamily: "var(--font-kalam)",
-                    fontWeight: 700,
-                    background: cat.accentPale,
-                    color: cat.accent,
-                    border: `1.5px solid ${cat.accent}`,
-                    borderRadius: "12px 4px 10px 4px / 4px 10px 4px 12px",
-                    padding: "2px 10px",
-                  }}
-                >
-                  {count}
-                </span>
-                <span
-                  style={{
-                    fontSize: "18px",
-                    color: cat.accent,
-                    fontFamily: "var(--font-marker)",
-                  }}
-                >
-                  →
-                </span>
-              </div>
-            </button>
+              width="min(96vw, 400px)"
+              fontSize="clamp(16px, 4.5vw, 22px)"
+              height="clamp(160px, 40vw, 200px)"
+            />
           );
         })}
       </div>
