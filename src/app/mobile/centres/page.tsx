@@ -215,7 +215,7 @@ export default function CentresPage() {
               width="min(96vw, 400px)"
               fontSize="clamp(14px, 4vw, 20px)"
               height="clamp(100px, calc((100dvh - 266px) / 3), 170px)"
-              style={i > 0 ? { marginTop: "-30px" } : undefined}
+              style={{ height: "clamp(100px, calc((100dvh - 266px) / 3), 170px)", ...(i > 0 ? { marginTop: "-30px" } : {}) }}
             />
           );
         })}
