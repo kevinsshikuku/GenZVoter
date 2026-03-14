@@ -27,6 +27,8 @@ interface BrushButtonProps {
   style?: React.CSSProperties;
   /** Text transform for the label (default: "uppercase") */
   textTransform?: React.CSSProperties["textTransform"];
+  /** Override the label text color (default: "#ffffff") */
+  textColor?: string;
 }
 
 export default function BrushButton({
@@ -42,6 +44,7 @@ export default function BrushButton({
   height,
   style: styleProp,
   textTransform: textTransformProp = "uppercase",
+  textColor: textColorProp,
 }: BrushButtonProps) {
   const [wiggling, setWiggling] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -72,7 +75,7 @@ export default function BrushButton({
   const btnSrc = isSmall ? "/assets/SmallLightButton_btn.png" : "/assets/LightModeButton_btn.png";
   const imgW = isSmall ? 683 : 1175;
   const imgH = isSmall ? 274 : 344;
-  const textColor = "#ffffff";
+  const textColor = textColorProp ?? "#ffffff";
   const shadow = "drop-shadow(0px 4px 8px rgba(0,0,0,0.28)) drop-shadow(0px 1px 3px rgba(0,0,0,0.18))";
   const imgFilter = (isSmall && theme === "dark") ? `invert(1) ${shadow}` : shadow;
   // BigDarkmodeButton (2100×1500): stroke x=524-1577, y=588-811 (1053×223px).
