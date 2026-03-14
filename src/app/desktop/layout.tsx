@@ -10,15 +10,15 @@ const NAV_LINKS = [
 ];
 
 const G = {
-  dark:    "#1a3a10",
-  mid:     "#2d5a1a",
-  pale:    "#e6f0de",
-  gold:    "#f59e0b",
-  bg:      "#f5f5f0",
-  surface: "#ffffff",
-  text:    "#111111",
-  muted:   "#6b7280",
-  border:  "#e5e7eb",
+  dark:    "var(--green-dark)",
+  mid:     "var(--green-mid)",
+  pale:    "var(--green-pale)",
+  gold:    "var(--gold)",
+  bg:      "var(--bg)",
+  surface: "var(--surface)",
+  text:    "var(--text)",
+  muted:   "var(--muted)",
+  border:  "var(--border2)",
 };
 
 export default function DesktopLayout({

@@ -4,16 +4,16 @@ import { useState, useRef } from "react";
 import { MYTH_CARDS } from "@/lib/data";
 
 const G = {
-  dark: "#1a3a10",
-  mid: "#2d5a1a",
-  pale: "#e6f0de",
-  gold: "#f59e0b",
-  bg: "#f5f5f0",
-  surface: "#ffffff",
-  text: "#111111",
-  muted: "#6b7280",
-  border: "#e5e7eb",
-  border2: "#d1d5db",
+  dark:    "var(--green-dark)",
+  mid:     "var(--green-mid)",
+  pale:    "var(--green-pale)",
+  gold:    "var(--gold)",
+  bg:      "var(--bg)",
+  surface: "var(--surface)",
+  text:    "var(--text)",
+  muted:   "var(--muted)",
+  border:  "var(--border2)",
+  border2: "var(--border)",
 };
 
 export default function MobileInfoPage() {
@@ -248,7 +248,7 @@ export default function MobileInfoPage() {
                 style={{
                   fontSize: "clamp(15px, 4vw, 17px)",
                   fontFamily: "var(--font-kalam)",
-                  color: "#1f2937",
+                  color: "var(--text)",
                   lineHeight: 1.6,
                   margin: 0,
                 }}

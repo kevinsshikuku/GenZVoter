@@ -1,31 +1,61 @@
 "use client";
 
 import { useState } from "react";
-import { REQUIREMENTS, REGISTRATION_CENTRES, GAME_LEVELS } from "@/lib/data";
+import Image from "next/image";
+import { REQUIREMENTS, GAME_LEVELS } from "@/lib/data";
+import BrushButton from "@/components/mobile/BrushButton";
 
-type Screen = "status" | "centres" | "requirements" | "quest";
+function CheckIcon({ size = 24, color = "#16a34a" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <path d="M12 2.5 C17.6 2.3 21.5 6.4 21.6 12 C21.7 17.7 17.8 21.8 12 21.7 C6.3 21.6 2.4 17.5 2.3 11.9 C2.2 6.3 6.4 2.7 12 2.5" stroke={color} strokeWidth="2.1" strokeLinecap="round" />
+      <path d="M7.5 12.2 C9 13.6 10.4 15.1 11.3 16 C13.2 13.4 15.6 10.8 17.1 9.2" stroke={color} strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ArrowRightIcon({ size = 24, color = "#16a34a" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <path d="M4.5 12.1 C8.8 12 15.2 12 19.5 12" stroke={color} strokeWidth="2.2" strokeLinecap="round" />
+      <path d="M14.8 7.5 C16.5 9.2 18.5 11 19.5 12.1 C18.4 13.2 16.4 15.1 14.8 16.6" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function VoteBoxIcon({ size = 18, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <path d="M4.2 10.5 L4 19.8 C4 21 5 21.8 6.1 21.9 L17.9 21.8 C19.1 21.8 20 21 20.1 19.7 L19.9 10.4" stroke={color} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2.5 10.6 L21.5 10.5" stroke={color} strokeWidth="2.1" strokeLinecap="round" />
+      <path d="M9.5 2.5 L7.2 10.5 M14.5 2.5 L16.8 10.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
+      <path d="M9.5 2.4 L14.5 2.5" stroke={color} strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+type Screen = "status" | "requirements" | "quest";
 
 const SCREENS: { id: Screen; label: string; icon: string }[] = [
   { id: "status",       label: "Am I Reg?",   icon: "🔍" },
-  { id: "centres",      label: "Where Tu?",   icon: "📍" },
   { id: "requirements", label: "What I Need", icon: "📋" },
   { id: "quest",        label: "Quest",       icon: "🎮" },
 ];
 
-/* Shared style tokens */
+/* Shared style tokens — all backed by CSS custom properties */
 const G = {
-  dark:   "#1a3a10",
-  mid:    "#2d5a1a",
-  light:  "#4a8a2a",
-  pale:   "#e6f0de",
-  gold:   "#f59e0b",
-  border: "#d1d5db",
-  border2:"#e5e7eb",
-  bg:     "#f5f5f0",
-  surface:"#ffffff",
-  text:   "#111111",
-  muted:  "#6b7280",
-  subtle: "#9ca3af",
+  dark:   "var(--green-dark)",
+  mid:    "var(--green-mid)",
+  light:  "var(--green-light)",
+  pale:   "var(--green-pale)",
+  gold:   "var(--gold)",
+  border: "var(--border)",
+  border2:"var(--border2)",
+  bg:     "var(--bg)",
+  surface:"var(--surface)",
+  text:   "var(--text)",
+  muted:  "var(--muted)",
+  subtle: "var(--subtle)",
 };
 
 export default function MobileRegisterPage() {
@@ -33,7 +63,7 @@ export default function MobileRegisterPage() {
   const [showWebview, setShowWebview] = useState(false);
 
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", background: G.bg, overflow: "hidden" }}>
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", background: G.bg, overflowX: "hidden", overflowY: screen === "requirements" ? "visible" : "hidden" }}>
 
       {/* IEBC webview — bottom cleared for sticky nav */}
       {showWebview && (
@@ -85,32 +115,31 @@ export default function MobileRegisterPage() {
         padding: "12px 14px 0",
         boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
       }}>
-        <div style={{ display: "flex", gap: "2px", overflowX: "auto" }} className="no-scrollbar">
+        <div style={{ display: "flex", gap: "0" }} className="no-scrollbar">
           {SCREENS.map((s) => (
             <button
               key={s.id}
               onClick={() => setScreen(s.id)}
               style={{
-                flexShrink: 0, padding: "8px 12px",
+                flex: 1, padding: "8px 12px",
                 borderRadius: "10px 10px 0 0", border: "none",
-                background: screen === s.id ? G.pale : "transparent",
+                background: "transparent",
                 borderBottom: screen === s.id ? `3px solid ${G.dark}` : "3px solid transparent",
                 color: screen === s.id ? G.dark : G.muted,
-                fontSize: "12px", fontWeight: 700, cursor: "pointer",
-                display: "flex", alignItems: "center", gap: "5px",
+                fontSize: "13px", fontWeight: 600, cursor: "pointer",
+                fontFamily: "system-ui, -apple-system, sans-serif",
+                display: "flex", alignItems: "center", justifyContent: "center",
                 transition: "all 0.2s ease", whiteSpace: "nowrap",
               }}
             >
-              <span>{s.icon}</span>
               {s.label}
             </button>
           ))}
         </div>
       </div>
 
-      <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch" } as React.CSSProperties} key={screen} className="no-scrollbar slide-in">
+      <div style={{ flex: 1, overflow: screen === "requirements" ? "hidden" : "auto", WebkitOverflowScrolling: "touch", display: "flex", flexDirection: "column" } as React.CSSProperties} key={screen} className="no-scrollbar slide-in">
         {screen === "status"       && <StatusScreen onOpenWebview={() => setShowWebview(true)} />}
-        {screen === "centres"      && <CentresScreen onNavigate={setScreen} />}
         {screen === "requirements" && <RequirementsScreen onNavigate={setScreen} />}
         {screen === "quest"        && <QuestScreen />}
       </div>
@@ -127,28 +156,20 @@ function StatusScreen({ onOpenWebview }: { onOpenWebview: () => void }) {
           Am I Registered?
         </h1>
         <p style={{ fontSize: "14px", color: G.muted, margin: 0 }}>
-          Uisjifiche, IEBC haitakukula.
+          Chapia wasee...
         </p>
       </div>
 
-      {/* Card */}
-      <div style={{ background: G.surface, border: `1.5px solid ${G.border2}`, borderRadius: "20px", padding: "24px 20px" }}>
-        <div style={{ fontSize: "44px", textAlign: "center", marginBottom: "12px" }}>🔍</div>
-        <h2 style={{ fontSize: "20px", fontWeight: 800, color: G.text, margin: "0 0 6px", textAlign: "center" }}>
-          Cheki Status Yako
-        </h2>
-        <p style={{ fontSize: "13px", color: G.muted, margin: "0 0 18px", textAlign: "center", lineHeight: 1.5 }}>
-          Verify kwenye IEBC official portal. Utahitaji:
-        </p>
-
+      {/* Card — no background/border, content only */}
+      <div style={{ padding: "0" }}>
         {[
-          { icon: "🪪", label: "ID Number", sub: "National ID au Passport No" },
-          { icon: "🎂", label: "Date of Birth", sub: "Year ya kuzaliwa kwako" },
+          { icon: "🪪", label: "ID Number", sub: "National ID ama Passport No." },
+          { icon: "🎂", label: "Date of Birth", sub: "Date ya kuzaliwa" },
         ].map((item) => (
           <div key={item.label} style={{
             display: "flex", alignItems: "center", gap: "12px",
-            background: G.pale, borderRadius: "12px", padding: "12px 14px",
-            marginBottom: "10px", border: `1px solid ${G.border}`,
+            background: G.pale, borderRadius: "6px", padding: "12px 14px",
+            marginBottom: "10px",
           }}>
             <span style={{ fontSize: "22px" }}>{item.icon}</span>
             <div>
@@ -158,120 +179,14 @@ function StatusScreen({ onOpenWebview }: { onOpenWebview: () => void }) {
           </div>
         ))}
 
-        <button
-          onClick={onOpenWebview}
-          style={{
-            width: "100%", padding: "16px", background: G.dark,
-            border: "none", borderRadius: "14px", color: "#fff",
-            fontSize: "16px", fontWeight: 800, cursor: "pointer",
-            marginTop: "6px", letterSpacing: "0.03em",
-            boxShadow: "0 3px 14px rgba(26,58,16,0.3)",
-          }}
-        >
-          Cheki &gt;
-        </button>
+        <div style={{ display: "flex", justifyContent: "center", marginTop: "6px" }}>
+          <BrushButton label="Cheki Status" onClick={onOpenWebview} />
+        </div>
       </div>
 
       <p style={{ textAlign: "center", fontSize: "12px", color: G.subtle }}>
         Powered by IEBC official portal
       </p>
-    </div>
-  );
-}
-
-/* ─── CENTRES ────────────────────────────────────────────────── */
-function CentresScreen({ onNavigate }: { onNavigate: (s: Screen) => void }) {
-  const [search, setSearch] = useState("");
-  const [expanded, setExpanded] = useState<string | null>(null);
-
-  const filtered = REGISTRATION_CENTRES.filter(
-    (c) =>
-      !search ||
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.county.toLowerCase().includes(search.toLowerCase())
-  );
-
-  return (
-    <div style={{ padding: "24px 20px", background: G.bg }}>
-      <h1 style={{ fontSize: "26px", fontWeight: 900, color: G.text, margin: "0 0 2px", lineHeight: 1.1 }}>
-        Where Tu? 📍
-      </h1>
-      <p style={{ fontSize: "14px", color: G.muted, margin: "0 0 18px" }}>Kuja leo ama jo.</p>
-
-      {/* Search */}
-      <div style={{ position: "relative", marginBottom: "12px" }}>
-        <span style={{ position: "absolute", left: "13px", top: "50%", transform: "translateY(-50%)", fontSize: "15px" }}>🔍</span>
-        <input
-          type="text"
-          placeholder="Search county or name..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            width: "100%", padding: "11px 13px 11px 40px",
-            background: G.surface, border: `1.5px solid ${G.border}`,
-            borderRadius: "12px", color: G.text, fontSize: "14px",
-            outline: "none", boxSizing: "border-box",
-          }}
-        />
-      </div>
-
-      <p style={{ fontSize: "12px", color: G.subtle, marginBottom: "10px" }}>
-        {filtered.length} centres found
-      </p>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "20px" }}>
-        {filtered.map((centre) => (
-          <div
-            key={centre.id}
-            onClick={() => setExpanded(expanded === centre.id ? null : centre.id)}
-            style={{
-              background: G.surface,
-              border: `1.5px solid ${expanded === centre.id ? G.dark : G.border2}`,
-              borderRadius: "14px", padding: "14px 16px",
-              cursor: "pointer", display: "flex", alignItems: "center", gap: "12px",
-            }}
-          >
-            <span style={{
-              width: "8px", height: "8px", borderRadius: "50%",
-              background: "#22c55e", flexShrink: 0, display: "inline-block",
-            }} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ fontSize: "15px", fontWeight: 700, color: G.text, margin: "0 0 2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {centre.name}
-              </p>
-              <p style={{ fontSize: "12px", color: G.muted, margin: 0 }}>
-                {centre.county} · Totally 100% open
-              </p>
-              {expanded === centre.id && (
-                <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: `1px solid ${G.border2}` }}>
-                  <p style={{ fontSize: "13px", color: G.muted, margin: "0 0 3px" }}>📍 {centre.address}</p>
-                  {centre.hours && <p style={{ fontSize: "12px", color: G.muted, margin: 0 }}>🕐 {centre.hours}</p>}
-                </div>
-              )}
-            </div>
-            <div style={{
-              width: "30px", height: "30px", borderRadius: "8px",
-              background: G.pale, border: `1px solid ${G.border}`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              flexShrink: 0,
-            }}>
-              <span style={{ fontSize: "14px", color: G.dark, fontWeight: 800 }}>›</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <button
-        onClick={() => onNavigate("requirements")}
-        style={{
-          width: "100%", padding: "16px", background: G.dark,
-          border: "none", borderRadius: "14px", color: "#fff",
-          fontSize: "15px", fontWeight: 800, cursor: "pointer",
-          letterSpacing: "0.04em",
-        }}
-      >
-        SAWA TUENDE → What I Need
-      </button>
     </div>
   );
 }
@@ -282,90 +197,88 @@ function RequirementsScreen({ onNavigate }: { onNavigate: (s: Screen) => void })
   const isReg = card === "register";
 
   return (
-    <div style={{ padding: "28px 20px", background: G.bg, display: "flex", flexDirection: "column", gap: "16px" }}>
+    <div style={{
+      padding: "16px 20px 0",
+      background: G.bg,
+      display: "flex",
+      flexDirection: "column",
+      flex: 1,
+      minHeight: 0,
+      overflow: "hidden",
+      gap: "10px",
+    }}>
       {/* Toggle */}
-      <div style={{ display: "flex", gap: "10px" }}>
+      <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexShrink: 0 }}>
         {(["register", "vote"] as const).map((t) => (
-          <button
+          <BrushButton
             key={t}
+            label={t === "register" ? "To Register" : "To Vote"}
             onClick={() => setCard(t)}
-            style={{
-              flex: 1, padding: "11px 8px", borderRadius: "12px",
-              border: `2px solid ${card === t ? G.dark : G.border}`,
-              background: card === t ? G.pale : G.surface,
-              color: card === t ? G.dark : G.muted,
-              fontWeight: 800, fontSize: "13px", cursor: "pointer",
-              transition: "all 0.2s ease",
-            }}
-          >
-            {t === "register" ? "🖐️ Register" : "🗳️ Vote"}
-          </button>
+            variant="small"
+            showArrow={false}
+            inactive={card !== t}
+          />
         ))}
       </div>
 
       {/* Card */}
       <div key={card} className="slide-in" style={{
-        background: G.surface, border: `1.5px solid ${G.border2}`,
-        borderRadius: "20px", padding: "26px 20px",
+        padding: "4px 4px 0",
+        display: "flex",
+        flexDirection: "column",
+        flex: 1,
+        minHeight: 0,
       }}>
         {isReg ? (
           <>
-            <h2 style={{ fontSize: "22px", fontWeight: 900, color: G.text, margin: "0 0 2px" }}>Register:</h2>
-            <p style={{ fontSize: "16px", fontWeight: 700, color: G.mid, margin: "0 0 20px" }}>Kitu tu mbili tu:</p>
-            <div style={{ display: "flex", justifyContent: "center", gap: "14px", marginBottom: "18px" }}>
-              {[{ icon: "🪪", label: "National ID" }, { icon: "🔞", label: "18+" }, { icon: "🧠", label: "Sound Mind" }].map((item) => (
-                <div key={item.label} style={{ textAlign: "center" }}>
-                  <div style={{
-                    width: "60px", height: "60px", borderRadius: "16px",
-                    background: G.pale, border: `1.5px solid ${G.border}`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: "26px", marginBottom: "6px",
-                  }}>{item.icon}</div>
+            <h2 style={{ fontSize: "20px", fontWeight: 900, color: G.text, margin: "0 0 2px", flexShrink: 0 }}>Register:</h2>
+            <p style={{ fontSize: "15px", fontWeight: 700, color: G.mid, margin: "0 0 10px", flexShrink: 0 }}>Mambo ni Matatu...</p>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px", flexShrink: 0 }}>
+              {[{ icon: "🪪", label: "National ID" }, { icon: "🔞", label: "18+" }, { icon: "🧠", label: "Akili" }].map((item) => (
+                <div key={item.label} style={{ textAlign: "center", flex: 1 }}>
+                  <div style={{ fontSize: "42px", marginBottom: "4px", lineHeight: 1 }}>{item.icon}</div>
                   <p style={{ fontSize: "10px", color: G.muted, fontWeight: 700, margin: 0, textTransform: "uppercase", letterSpacing: "0.06em" }}>
                     {item.label}
                   </p>
                 </div>
               ))}
             </div>
-            <p style={{ fontSize: "14px", color: G.muted, textAlign: "center", margin: "0 0 22px", lineHeight: 1.5 }}>
+            <p style={{ fontSize: "13px", color: G.muted, textAlign: "center", margin: "0 0 8px", lineHeight: 1.4, flexShrink: 0 }}>
               National ID or valid passport. Not registered elsewhere.
             </p>
           </>
         ) : (
           <>
-            <h2 style={{ fontSize: "22px", fontWeight: 900, color: G.text, margin: "0 0 2px" }}>Glovo ni hard?</h2>
-            <p style={{ fontSize: "18px", fontWeight: 800, color: "#16a34a", margin: "0 0 18px" }}>Voting ni easy! ✅</p>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "16px" }}>
-              {[{ icon: "🪪" }, { arrow: true }, { icon: "✅" }].map((item, i) =>
-                "arrow" in item ? (
-                  <span key={i} style={{ fontSize: "24px", color: "#16a34a" }}>→</span>
-                ) : (
-                  <div key={i} style={{
-                    width: "56px", height: "56px", borderRadius: "14px",
-                    background: "#dcfce7", border: "1.5px solid #bbf7d0",
-                    display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px",
-                  }}>{item.icon}</div>
-                )
-              )}
-            </div>
-            <p style={{ fontSize: "14px", color: G.muted, textAlign: "center", margin: "0 0 20px", lineHeight: 1.6 }}>
-              Twanga ID au passport kwa polling station.<br />
+            <p style={{ fontSize: "18px", fontWeight: 800, color: "#16a34a", margin: "0 0 4px", flexShrink: 0 }}>Voting ni easy man!</p>
+            <p style={{ fontSize: "13px", color: G.muted, textAlign: "center", margin: "0 0 8px", lineHeight: 1.5, flexShrink: 0 }}>
+              Tokea na ID au passport kwa polling station.<br />
               <strong style={{ color: "#16a34a" }}>Slip si lazima.</strong>
             </p>
           </>
         )}
 
-        <button
-          onClick={() => isReg ? setCard("vote") : onNavigate("quest")}
-          style={{
-            width: "100%", padding: "16px", background: G.dark,
-            border: "none", borderRadius: "14px", color: "#fff",
-            fontSize: "15px", fontWeight: 800, cursor: "pointer",
-            letterSpacing: "0.06em", boxShadow: "0 3px 14px rgba(26,58,16,0.3)",
-          }}
-        >
-          SAWA TUENDE →
-        </button>
+        {/* Image fills remaining space + extends 64px into nav spacer so no gap shows */}
+        <div style={{
+          flex: 1,
+          minHeight: 0,
+          position: "relative",
+          marginLeft: "-20px",
+          marginRight: "-20px",
+          marginBottom: "-64px",
+          overflow: "hidden",
+        }}>
+          <Image
+            src={isReg ? "/assets/Genz3.png" : "/assets/Genz2.png"}
+            alt="Gen Z youth holding Kenyan flag"
+            fill
+            style={{
+              objectFit: "cover",
+              objectPosition: isReg ? "top center" : "center center",
+              display: "block",
+            }}
+            priority
+          />
+        </div>
       </div>
 
       {/* suppress unused import */}
@@ -416,12 +329,14 @@ function QuestScreen() {
   };
 
   return (
-    <div style={{ padding: "24px 20px", background: G.bg }}>
-      <h1 style={{ fontSize: "24px", fontWeight: 900, color: G.text, margin: "0 0 2px" }}>Registration Quest 🎮</h1>
-      <p style={{ fontSize: "13px", color: G.muted, margin: "0 0 16px" }}>4 levels. Less steps than creating a TikTok account.</p>
-
-      {/* Progress */}
-      <div style={{ background: G.surface, border: `1.5px solid ${G.border2}`, borderRadius: "16px", padding: "14px 16px", marginBottom: "16px" }}>
+    <div style={{ padding: "0 20px 24px", background: G.bg }}>
+      {/* Progress — sticky at top */}
+      <div style={{
+        position: "sticky", top: 0, zIndex: 10,
+        background: G.bg,
+        padding: "14px 0 10px",
+        marginBottom: "4px",
+      }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
           <span style={{ fontSize: "13px", fontWeight: 700, color: G.muted }}>
             Adulting Ni Gome Tu! <span style={{ color: pct === 100 ? "#16a34a" : G.dark }}>{pct}%</span>
@@ -446,6 +361,9 @@ function QuestScreen() {
           ))}
         </div>
       </div>
+
+      <h1 style={{ fontSize: "24px", fontWeight: 900, color: G.text, margin: "0 0 2px" }}>Registration Quest 🎮</h1>
+      <p style={{ fontSize: "13px", color: G.muted, margin: "0 0 16px" }}>4 levels. Less steps than creating a TikTok account.</p>
 
       {/* Levels */}
       <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "18px" }}>
@@ -502,16 +420,16 @@ function QuestScreen() {
                     </div>
                   )}
                   {!isCompleted && (
-                    <button
-                      onClick={(e) => { e.stopPropagation(); completeLevel(level); }}
-                      style={{
-                        width: "100%", padding: "13px", background: G.dark,
-                        border: "none", borderRadius: "12px",
-                        color: "#fff", fontSize: "14px", fontWeight: 800, cursor: "pointer",
-                      }}
-                    >
-                      Mark Level {level.id} Done ✅
-                    </button>
+                    <div style={{ display: "flex", justifyContent: "center" }} onClick={(e) => e.stopPropagation()}>
+                      <BrushButton
+                        label={`Mark Level ${level.id} Done ✅`}
+                        onClick={() => completeLevel(level)}
+                        variant="small"
+                        showArrow={false}
+                        width="min(100%, 280px)"
+                        fontSize="clamp(11px, 3.2vw, 13px)"
+                      />
+                    </div>
                   )}
                 </div>
               )}
@@ -526,28 +444,24 @@ function QuestScreen() {
           <p style={{ fontSize: "28px", margin: "0 0 8px" }}>🎉</p>
           <p style={{ fontSize: "16px", fontWeight: 800, color: G.text, margin: "0 0 5px" }}>Umesign! Respect. 🫡</p>
           <p style={{ fontSize: "13px", color: G.muted, margin: "0 0 14px" }}>Screenshot hii na utume squad yako.</p>
-          <button
-            onClick={() => {
-              if (navigator.share) navigator.share({ title: "GenZ Voter 2027", text: "Nimejicommit kupiga kura 2027. Toke na mbogi 👀", url: window.location.origin });
-            }}
-            style={{ padding: "12px 20px", background: G.dark, border: "none", borderRadius: "12px", color: "#fff", fontSize: "14px", fontWeight: 700, cursor: "pointer" }}
-          >
-            Share to Squad 💬
-          </button>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <BrushButton
+              label="Share na Squadi"
+              variant="small"
+              showArrow={false}
+              width="min(100%, 260px)"
+              fontSize="clamp(11px, 3.2vw, 13px)"
+              textTransform="capitalize"
+              onClick={() => {
+                if (navigator.share) navigator.share({ title: "GenZ Voter 2027", text: "Nimejicommit kupiga kura 2027. Toke na mbogi 👀", url: window.location.origin });
+              }}
+            />
+          </div>
         </div>
       ) : (
-        <button
-          onClick={handlePledge}
-          className="pulse-ring"
-          style={{
-            width: "100%", padding: "18px", background: G.dark,
-            border: "none", borderRadius: "16px", color: "#fff",
-            fontSize: "15px", fontWeight: 800, cursor: "pointer",
-            boxShadow: "0 5px 20px rgba(26,58,16,0.35)", letterSpacing: "0.04em",
-          }}
-        >
-          Sawa, Nitaenda Kupiga Kura 2027 🗳️
-        </button>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <BrushButton label="Occupy Polling Station 🗳️" onClick={handlePledge} />
+        </div>
       )}
     </div>
   );

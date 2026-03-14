@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { GAME_LEVELS } from "@/lib/data";
 import type { GameLevel } from "@/lib/types";
+import BrushButton from "@/components/mobile/BrushButton";
 
 export default function MobileGamePage() {
   const [completedLevels, setCompletedLevels] = useState<number[]>([]);
@@ -49,16 +50,16 @@ export default function MobileGamePage() {
   const progressPct = Math.round((totalXP / maxXP) * 100);
 
   return (
-    <div style={{ padding: "24px 20px", minHeight: "100dvh" }}>
+    <div style={{ padding: "24px 20px", minHeight: "100dvh", background: "var(--bg)" }}>
       {/* Header */}
       <div style={{ marginBottom: "20px" }}>
         <p style={{ fontSize: "12px", color: "#a855f7", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "6px" }}>
           Voter Quest 🎮
         </p>
-        <h1 style={{ fontSize: "26px", fontWeight: 900, color: "#f8fafc", margin: "0 0 6px" }}>
+        <h1 style={{ fontSize: "26px", fontWeight: 900, color: "var(--text)", margin: "0 0 6px" }}>
           Jiregistre — 4 Levels
         </h1>
-        <p style={{ fontSize: "13px", color: "#94a3b8", margin: 0 }}>
+        <p style={{ fontSize: "13px", color: "var(--muted)", margin: 0 }}>
           Complete all levels na uwe mtu kamili wa Kenya 🇰🇪
         </p>
       </div>
@@ -206,7 +207,7 @@ export default function MobileGamePage() {
                         +{level.xp} XP
                       </span>
                     </div>
-                    <h3 style={{ fontSize: "16px", fontWeight: 800, color: isLocked ? "#475569" : "#f8fafc", margin: "0 0 2px" }}>
+                    <h3 style={{ fontSize: "16px", fontWeight: 800, color: isLocked ? "var(--subtle)" : "var(--text)", margin: "0 0 2px" }}>
                       {level.title}
                     </h3>
                     <p style={{ fontSize: "12px", color: "#64748b", margin: 0 }}>
@@ -344,7 +345,7 @@ function PledgeSection() {
       {pledged ? (
         <>
           <div style={{ fontSize: "48px", marginBottom: "12px" }}>🎉</div>
-          <h2 style={{ fontSize: "20px", fontWeight: 900, color: "#f8fafc", margin: "0 0 8px" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: 900, color: "var(--text)", margin: "0 0 8px" }}>
             Umesign! Respect. 🫡
           </h2>
           <p style={{ fontSize: "14px", color: "#94a3b8", margin: "0 0 16px" }}>
@@ -377,30 +378,15 @@ function PledgeSection() {
       ) : (
         <>
           <div style={{ fontSize: "40px", marginBottom: "12px" }}>🫡</div>
-          <h2 style={{ fontSize: "20px", fontWeight: 900, color: "#f8fafc", margin: "0 0 8px" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: 900, color: "var(--text)", margin: "0 0 8px" }}>
             Commit to Vote 2027
           </h2>
           <p style={{ fontSize: "14px", color: "#94a3b8", margin: "0 0 20px", lineHeight: 1.6 }}>
             Tap below. Get confetti. Screenshot na utume squad.
           </p>
-          <button
-            onClick={handlePledge}
-            className="pulse-ring"
-            style={{
-              width: "100%",
-              padding: "18px",
-              background: "linear-gradient(135deg, #ec4899, #a855f7)",
-              border: "none",
-              borderRadius: "16px",
-              color: "#fff",
-              fontSize: "16px",
-              fontWeight: 800,
-              cursor: "pointer",
-              boxShadow: "0 6px 24px rgba(236,72,153,0.5)",
-            }}
-          >
-            Sawa, Nitaenda Kupiga Kura 2027 🗳️
-          </button>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <BrushButton label="Nitaenda Kupiga Kura 2027 🗳️" onClick={handlePledge} />
+          </div>
         </>
       )}
     </div>

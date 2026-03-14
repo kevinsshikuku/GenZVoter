@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { getCountdown } from "@/lib/countdown";
 import type { CountdownValues } from "@/lib/countdown";
+import BrushButton from "@/components/mobile/BrushButton";
 
 export default function CountdownHero() {
   const [countdown, setCountdown] = useState<CountdownValues | null>(null);
@@ -45,294 +47,177 @@ export default function CountdownHero() {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        background: "#ffffff",
+        background: "var(--surface)",
         position: "relative",
         overflow: "hidden",
       }}
     >
-      {/* Confetti-coloured top strip */}
+      {/* GenZ image — home page only */}
       <div
         style={{
-          height: "5px",
-          background: "linear-gradient(90deg, #2d5a1a 0%, #f59e0b 33%, #dc2626 66%, #1d4ed8 100%)",
+          width: "100%",
+          flex: "0 0 50%",
+          minHeight: 0,
+          position: "relative",
+          overflow: "visible",
         }}
-      />
+      >
+        <Image
+          src="/assets/GenZ1.png"
+          alt="GenZ Kenya"
+          fill
+          style={{
+            objectFit: "contain",
+            objectPosition: "bottom center",
+            transform: "scale(1.18)",
+            transformOrigin: "bottom center",
+          }}
+          priority
+        />
+      </div>
 
       {/* Content */}
       <div
         style={{
-          flex: 1,
+          flex: "1 1 0",
+          minHeight: 0,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "space-between",
-          padding: "40px 24px 28px",
+          justifyContent: "space-evenly",
+          padding: "0 20px 8px",
           textAlign: "center",
+          overflow: "hidden",
         }}
       >
-        {/* Kenya badge — hand-drawn pill */}
-        <div
-          className="sk-sm"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "6px",
-            background: "#e6f0de",
-            border: "2px solid #2d5a1a",
-            padding: "5px 14px",
-          }}
-        >
-          <span style={{ fontSize: "14px" }}>🇰🇪</span>
-          <span
+        {/* IN X DAYS */}
+        {countdown && (
+          <div
             style={{
-              fontSize: "11px",
-              fontWeight: 700,
-              fontFamily: "var(--font-kalam)",
-              color: "#1a3a10",
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
+              display: "flex",
+              alignItems: "baseline",
+              gap: "8px",
+              justifyContent: "center",
             }}
           >
-            Kenya General Elections
-          </span>
+            <span
+              style={{
+                fontSize: "clamp(10px, 2.5vw, 14px)",
+                fontFamily: "var(--font-kalam)",
+                fontWeight: 700,
+                color: "var(--subtle)",
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+              }}
+            >
+              IN
+            </span>
+            <span
+              className={vibrating ? "vibrate" : ""}
+              style={{
+                fontSize: "clamp(48px, 15vw, 86px)",
+                fontFamily: "var(--font-marker)",
+                color: "var(--green-dark)",
+                lineHeight: 1,
+                fontVariantNumeric: "tabular-nums",
+              }}
+            >
+              {countdown.days}
+            </span>
+            <span
+              style={{
+                fontSize: "clamp(10px, 2.5vw, 14px)",
+                fontFamily: "var(--font-kalam)",
+                fontWeight: 700,
+                color: "var(--subtle)",
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+              }}
+            >
+              DAYS
+            </span>
+          </div>
+        )}
+
+        {/* NI MBAYA! */}
+        <div
+          style={{
+            fontSize: "clamp(22px, 6.5vw, 42px)",
+            fontFamily: "var(--font-marker)",
+            color: "var(--green-dark)",
+            borderBottom: "3px solid #f59e0b",
+            paddingBottom: "2px",
+          }}
+        >
+          NI MBAYA! 😤
         </div>
 
-        {/* Big number block */}
-        <div
+        {/* Subline */}
+        <p
           style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "4px",
+            fontSize: "clamp(11px, 3.2vw, 14px)",
+            fontFamily: "var(--font-kalam)",
+            color: "var(--muted)",
+            margin: 0,
+            lineHeight: 1.4,
           }}
         >
-          {/* 2027 — Permanent Marker */}
-          <div
-            style={{
-              fontSize: "clamp(86px, 26vw, 120px)",
-              fontFamily: "var(--font-marker)",
-              lineHeight: 0.85,
-              color: "#111111",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            2027
-          </div>
+          Ukilalisha usiwai lia aty hakuna change bro!!
+        </p>
 
-          <div
-            style={{
-              fontSize: "clamp(11px, 3vw, 14px)",
-              fontFamily: "var(--font-kalam)",
-              fontWeight: 700,
-              color: "#6b7280",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              marginBottom: "8px",
-            }}
-          >
-            ELECTIONS
-          </div>
-
-          {/* IN X DAYS */}
-          {countdown && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "baseline",
-                gap: "10px",
-                justifyContent: "center",
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "clamp(12px, 3vw, 15px)",
-                  fontFamily: "var(--font-kalam)",
-                  fontWeight: 700,
-                  color: "#9ca3af",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.12em",
-                }}
-              >
-                IN
-              </span>
-              <span
-                className={vibrating ? "vibrate" : ""}
-                style={{
-                  fontSize: "clamp(60px, 19vw, 86px)",
-                  fontFamily: "var(--font-marker)",
-                  color: "#1a3a10",
-                  lineHeight: 1,
-                  fontVariantNumeric: "tabular-nums",
-                }}
-              >
-                {countdown.days}
-              </span>
-              <span
-                style={{
-                  fontSize: "clamp(12px, 3vw, 15px)",
-                  fontFamily: "var(--font-kalam)",
-                  fontWeight: 700,
-                  color: "#9ca3af",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.12em",
-                }}
-              >
-                DAYS
-              </span>
-            </div>
-          )}
-
-          {/* NI MBAYA! — Permanent Marker */}
-          <div
-            style={{
-              fontSize: "clamp(28px, 8vw, 42px)",
-              fontFamily: "var(--font-marker)",
-              color: "#1a3a10",
-              borderBottom: "4px solid #f59e0b",
-              paddingBottom: "4px",
-              marginTop: "4px",
-            }}
-          >
-            NI MBAYA! 😤
-          </div>
-
-          {/* Subline */}
-          <p
-            style={{
-              fontSize: "14px",
-              fontFamily: "var(--font-kalam)",
-              color: "#6b7280",
-              margin: "12px 0 0",
-              lineHeight: 1.55,
-            }}
-          >
-            Uisjifiche, IEBC haitakukula.
-          </p>
-
-          {/* HRS / MIN / SEC ticker — sketchy container */}
-          {countdown && (
-            <div
-              className="sk-md"
-              style={{
-                display: "flex",
-                gap: "0",
-                background: "#f0f0eb",
-                border: "2px solid #d1d5db",
-                overflow: "hidden",
-                marginTop: "16px",
-              }}
-            >
-              {[
-                { v: countdown.hours,   l: "HRS" },
-                { v: countdown.minutes, l: "MIN" },
-                { v: countdown.seconds, l: "SEC" },
-              ].map(({ v, l }, i) => (
+        {/* HRS / MIN / SEC ticker */}
+        {countdown && (
+          <div style={{ display: "flex", gap: "16px" }}>
+            {[
+              { v: countdown.hours,   l: "HRS" },
+              { v: countdown.minutes, l: "MIN" },
+              { v: countdown.seconds, l: "SEC" },
+            ].map(({ v, l }) => (
+              <div key={l} style={{ textAlign: "center" }}>
                 <div
-                  key={l}
                   style={{
-                    textAlign: "center",
-                    padding: "10px 18px",
-                    borderRight: i < 2 ? "2px solid #d1d5db" : "none",
+                    fontSize: "clamp(18px, 5vw, 24px)",
+                    fontFamily: "var(--font-marker)",
+                    color: "var(--green-dark)",
+                    fontVariantNumeric: "tabular-nums",
+                    lineHeight: 1,
                   }}
                 >
-                  <div
-                    style={{
-                      fontSize: "22px",
-                      fontFamily: "var(--font-marker)",
-                      color: "#1a3a10",
-                      fontVariantNumeric: "tabular-nums",
-                      lineHeight: 1,
-                    }}
-                  >
-                    {String(v).padStart(2, "0")}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "9px",
-                      fontFamily: "var(--font-kalam)",
-                      color: "#9ca3af",
-                      fontWeight: 700,
-                      letterSpacing: "0.1em",
-                      marginTop: "3px",
-                    }}
-                  >
-                    {l}
-                  </div>
+                  {String(v).padStart(2, "0")}
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+                <div
+                  style={{
+                    fontSize: "9px",
+                    fontFamily: "var(--font-kalam)",
+                    color: "var(--subtle)",
+                    fontWeight: 700,
+                    letterSpacing: "0.1em",
+                    marginTop: "2px",
+                  }}
+                >
+                  {l}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* CTA */}
-        <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: "10px" }}>
-          <SwipeCTA onClick={() => router.push("/mobile/register")} />
+        <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
+          <BrushButton label="Cheki hio List" onClick={() => router.push("/mobile/register")} wiggleOnIdle />
           <p
             style={{
-              fontSize: "12px",
+              fontSize: "clamp(10px, 2.8vw, 12px)",
               fontFamily: "var(--font-kalam)",
-              color: "#9ca3af",
+              color: "var(--subtle)",
               margin: 0,
               textAlign: "center",
             }}
           >
-            If you can queue for Nyege Nyege, queue once to vote.
+            Umesota na hauna Kura! Wacha Ufala... Hi kitu ni Once in 5yrs
           </p>
         </div>
       </div>
     </div>
-  );
-}
-
-function SwipeCTA({ onClick }: { onClick: () => void }) {
-  const [wiggling, setWiggling] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const usedRef = useRef(false);
-
-  useEffect(() => {
-    function schedule() {
-      timerRef.current = setTimeout(() => {
-        if (!usedRef.current) {
-          setWiggling(true);
-          setTimeout(() => {
-            setWiggling(false);
-            schedule();
-          }, 800);
-        }
-      }, 3000);
-    }
-    schedule();
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
-
-  return (
-    <button
-      className={`sk-btn ${wiggling ? "wiggle" : ""}`}
-      onClick={() => {
-        usedRef.current = true;
-        onClick();
-      }}
-      style={{
-        width: "100%",
-        padding: "18px 24px",
-        background: "#1a3a10",
-        border: "2.5px solid #1a3a10",
-        color: "#ffffff",
-        fontSize: "17px",
-        fontFamily: "var(--font-marker)",
-        cursor: "pointer",
-        letterSpacing: "0.06em",
-        /* Hard drop shadow = hand-drawn stamp feel */
-        boxShadow: "4px 4px 0px #0d2008",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "10px",
-      }}
-    >
-      SWIPE <span style={{ fontSize: "20px" }}>→</span>
-    </button>
   );
 }
