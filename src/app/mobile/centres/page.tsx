@@ -179,17 +179,6 @@ export default function CentresPage() {
         >
           Registration Centres 📍
         </p>
-        <h1
-          style={{
-            fontSize: "28px",
-            fontFamily: "var(--font-marker)",
-            color: G.text,
-            margin: "0 0 5px",
-            lineHeight: 1.1,
-          }}
-        >
-          Find a Centre
-        </h1>
         <p
           style={{
             fontSize: "13px",
@@ -226,10 +215,8 @@ export default function CentresPage() {
         style={{
           marginTop: "20px",
           padding: "12px 16px",
-          background: G.surface,
-          border: `1.5px solid ${G.border}`,
-          borderRadius: "6px 20px 5px 18px / 18px 5px 20px 6px",
-          boxShadow: "2px 2px 0px #d1d5db",
+          background: "transparent",
+          border: "none",
         }}
       >
         <p

@@ -34,12 +34,11 @@ function VoteBoxIcon({ size = 18, color = "currentColor" }: { size?: number; col
   );
 }
 
-type Screen = "status" | "requirements" | "quest";
+type Screen = "status" | "requirements";
 
 const SCREENS: { id: Screen; label: string; icon: string }[] = [
   { id: "status",       label: "Am I Reg?",   icon: "🔍" },
   { id: "requirements", label: "What I Need", icon: "📋" },
-  { id: "quest",        label: "Quest",       icon: "🎮" },
 ];
 
 /* Shared style tokens — all backed by CSS custom properties */
@@ -141,7 +140,6 @@ export default function MobileRegisterPage() {
       <div style={{ flex: 1, overflow: screen === "requirements" ? "hidden" : "auto", WebkitOverflowScrolling: "touch", display: "flex", flexDirection: "column" } as React.CSSProperties} key={screen} className="no-scrollbar slide-in">
         {screen === "status"       && <StatusScreen onOpenWebview={() => setShowWebview(true)} />}
         {screen === "requirements" && <RequirementsScreen onNavigate={setScreen} />}
-        {screen === "quest"        && <QuestScreen />}
       </div>
     </div>
   );
@@ -152,11 +150,8 @@ function StatusScreen({ onOpenWebview }: { onOpenWebview: () => void }) {
   return (
     <div style={{ padding: "28px 20px", display: "flex", flexDirection: "column", gap: "18px" }}>
       <div>
-        <h1 style={{ fontSize: "28px", fontWeight: 900, color: G.text, margin: "0 0 4px", lineHeight: 1.1 }}>
-          Am I Registered?
-        </h1>
         <p style={{ fontSize: "14px", color: G.muted, margin: 0 }}>
-          Chapia wasee...
+          Chapia wasee ni ...
         </p>
       </div>
 
@@ -168,7 +163,7 @@ function StatusScreen({ onOpenWebview }: { onOpenWebview: () => void }) {
         ].map((item) => (
           <div key={item.label} style={{
             display: "flex", alignItems: "center", gap: "12px",
-            background: G.pale, borderRadius: "6px", padding: "12px 14px",
+            background: "transparent", borderRadius: "6px", padding: "12px 14px",
             marginBottom: "10px",
           }}>
             <span style={{ fontSize: "22px" }}>{item.icon}</span>
@@ -180,7 +175,7 @@ function StatusScreen({ onOpenWebview }: { onOpenWebview: () => void }) {
         ))}
 
         <div style={{ display: "flex", justifyContent: "center", marginTop: "6px" }}>
-          <BrushButton label="Cheki Status" onClick={onOpenWebview} />
+          <BrushButton label="IEBC Portal" onClick={onOpenWebview} textColor="#22c55e" />
         </div>
       </div>
 

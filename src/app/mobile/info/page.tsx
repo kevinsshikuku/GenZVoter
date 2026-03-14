@@ -78,110 +78,55 @@ export default function MobileInfoPage() {
         overflow: "hidden",
       }}
     >
-      {/* Header */}
-      <div style={{ marginBottom: "18px" }}>
-        <p
-          style={{
-            fontSize: "11px",
-            fontWeight: 700,
-            fontFamily: "var(--font-kalam)",
-            color: G.dark,
-            textTransform: "uppercase",
-            letterSpacing: "0.15em",
-            margin: "0 0 5px",
-          }}
-        >
-          Swipa Memes 👀
-        </p>
-        <h1
-          style={{
-            fontSize: "26px",
-            fontFamily: "var(--font-marker)",
-            color: G.text,
-            margin: "0 0 4px",
-            lineHeight: 1.1,
-          }}
-        >
-          Myths vs Reality
-        </h1>
-        <p style={{ fontSize: "13px", fontFamily: "var(--font-kalam)", color: G.muted, margin: 0 }}>
-          Make it make sense. {MYTH_CARDS.length} cards.
-        </p>
-      </div>
 
-      {/* Progress dots */}
-      <div style={{ display: "flex", gap: "5px", marginBottom: "18px" }}>
-        {MYTH_CARDS.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => { setCurrentIdx(i); setFlipped(false); }}
-            style={{
-              height: "4px",
-              flex: 1,
-              border: "none",
-              padding: 0,
-              /* Sketchy progress pip */
-              borderRadius: "2px 6px 1px 5px / 5px 1px 6px 2px",
-              cursor: "pointer",
-              background:
-                i === currentIdx
-                  ? G.dark
-                  : i < currentIdx
-                  ? "rgba(26,58,16,0.3)"
-                  : G.border2,
-              transition: "background 0.2s ease",
-            }}
-          />
-        ))}
-      </div>
 
       {/* Card */}
       <div
-        style={{ flex: 1, display: "flex", flexDirection: "column", gap: "14px" }}
+        style={{ flex: 1, display: "flex", flexDirection: "column", gap: "4px" }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {/* BrushButton-style card — grid trick animates height on flip and card change */}
-        <div onClick={() => setFlipped(!flipped)} style={{ cursor: "pointer" }}>
+        {/* Fixed-height card — both faces sit absolutely inside, opacity swaps on flip */}
+        <div
+          onClick={() => setFlipped(!flipped)}
+          style={{ cursor: "pointer", position: "relative", height: "280px", marginLeft: "-20px", marginRight: "-20px", marginBottom: "-60px" }}
+        >
+          {/* Brush background */}
+          <div aria-hidden style={{ position: "absolute", inset: 0, filter: cardFilter, ...(theme === "dark" ? darkCardBg : { backgroundImage: "url(/assets/LightModeButton_btn.png)", backgroundSize: "100% 100%" }) }} />
+
           {/* MYTH face */}
-          <div style={{ display: "grid", gridTemplateRows: flipped ? "0fr" : "1fr", transition: "grid-template-rows 0.25s ease" }}>
-            <div style={{ overflow: "hidden", position: "relative" }}>
-              <div aria-hidden style={{ position: "absolute", inset: 0, filter: cardFilter, ...(theme === "dark" ? darkCardBg : { backgroundImage: "url(/assets/LightModeButton_btn.png)", backgroundSize: "100% 100%" }) }} />
-              <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px", padding: "24px 28px", textAlign: "center" }}>
-                <span style={{ fontSize: "10px", fontWeight: 700, fontFamily: "var(--font-kalam)", color: "#fca5a5", textTransform: "uppercase", letterSpacing: "0.12em", background: "rgba(220,38,38,0.25)", border: "1px solid rgba(239,68,68,0.5)", borderRadius: "4px", padding: "2px 8px" }}>
-                  MYTH
-                </span>
-                <p style={{ fontSize: "clamp(15px, 4.2vw, 18px)", fontFamily: "var(--font-marker)", color: "#ffffff", margin: 0, lineHeight: 1.3 }}>
-                  &ldquo;{card.myth}&rdquo;
-                </p>
-                <p style={{ fontSize: "11px", fontFamily: "var(--font-kalam)", color: "rgba(255,255,255,0.6)", margin: 0 }}>
-                  Tap to see the reality
-                </p>
-              </div>
-            </div>
+          <div style={{
+            position: "absolute", inset: 0,
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            gap: "10px", padding: "24px 28px", textAlign: "center",
+            opacity: flipped ? 0 : 1, transition: "opacity 0.2s ease", pointerEvents: flipped ? "none" : "auto",
+          }}>
+            <p style={{ fontSize: "clamp(14px, 4vw, 17px)", fontFamily: "system-ui, -apple-system, sans-serif", fontWeight: 700, color: "#ffffff", margin: 0, lineHeight: 1.3 }}>
+              &ldquo;{card.myth}&rdquo;
+            </p>
+            <p style={{ fontSize: "11px", fontFamily: "var(--font-kalam)", color: "rgba(255,255,255,0.6)", margin: 0 }}>
+              Tap to see the reality
+            </p>
           </div>
 
           {/* REALITY face */}
-          <div style={{ display: "grid", gridTemplateRows: flipped ? "1fr" : "0fr", transition: "grid-template-rows 0.25s ease" }}>
-            <div style={{ overflow: "hidden", position: "relative" }}>
-              <div aria-hidden style={{ position: "absolute", inset: 0, filter: cardFilter, ...(theme === "dark" ? darkCardBg : { backgroundImage: "url(/assets/LightModeButton_btn.png)", backgroundSize: "100% 100%" }) }} />
-              <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px", padding: "24px 28px", textAlign: "center" }}>
-                <span style={{ fontSize: "10px", fontWeight: 700, fontFamily: "var(--font-kalam)", color: "#86efac", textTransform: "uppercase", letterSpacing: "0.12em", background: "rgba(22,163,74,0.25)", border: "1px solid rgba(34,197,94,0.5)", borderRadius: "4px", padding: "2px 8px" }}>
-                  REALITY: Si ukweli!
-                </span>
-                <p style={{ fontSize: "clamp(14px, 4vw, 16px)", fontFamily: "var(--font-kalam)", color: "#ffffff", lineHeight: 1.5, margin: 0 }}>
-                  {card.reality}
-                </p>
-                {card.stat && (
-                  <p style={{ fontSize: "11px", fontFamily: "var(--font-kalam)", color: "#fde68a", margin: 0, fontWeight: 700 }}>
-                    {card.stat}
-                  </p>
-                )}
-                <p style={{ fontSize: "11px", fontFamily: "var(--font-kalam)", color: "rgba(255,255,255,0.6)", margin: 0 }}>
-                  Tap to flip back
-                </p>
-              </div>
-            </div>
+          <div style={{
+            position: "absolute", inset: 0,
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            gap: "10px", padding: "24px 28px", textAlign: "center",
+            opacity: flipped ? 1 : 0, transition: "opacity 0.2s ease", pointerEvents: flipped ? "auto" : "none",
+          }}>
+            <p style={{ fontSize: "clamp(13px, 3.8vw, 16px)", fontFamily: "var(--font-kalam)", color: "#ffffff", lineHeight: 1.5, margin: 0, whiteSpace: "pre-line" }}>
+              {card.reality}
+            </p>
+            {card.stat && (
+              <p style={{ fontSize: "11px", fontFamily: "var(--font-kalam)", color: "#fde68a", margin: 0, fontWeight: 700 }}>
+                {card.stat}
+              </p>
+            )}
+            <p style={{ fontSize: "11px", fontFamily: "var(--font-kalam)", color: "rgba(255,255,255,0.6)", margin: 0 }}>
+              Tap to flip back
+            </p>
           </div>
         </div>
 
@@ -242,48 +187,6 @@ export default function MobileInfoPage() {
           {currentIdx + 1} / {MYTH_CARDS.length} · Swipe or tap
         </p>
 
-        {currentIdx === MYTH_CARDS.length - 1 && flipped && (
-          <div
-            className="sk-md"
-            style={{
-              background: G.pale,
-              border: `2px solid ${G.dark}`,
-              padding: "16px",
-              textAlign: "center",
-              boxShadow: "3px 3px 0px #1a3a10",
-            }}
-          >
-            <p
-              style={{
-                fontSize: "14px",
-                fontFamily: "var(--font-kalam)",
-                color: G.dark,
-                margin: "0 0 12px",
-                lineHeight: 1.5,
-                fontWeight: 700,
-              }}
-            >
-              Umesoma hii yote? Basi huna sababu ya kutopiga kura 2027 🇰🇪
-            </p>
-            <a
-              href="/mobile/register"
-              className="sk-btn"
-              style={{
-                display: "inline-block",
-                padding: "12px 20px",
-                background: G.dark,
-                border: "2px solid #0d2008",
-                color: "#fff",
-                fontFamily: "var(--font-marker)",
-                fontSize: "14px",
-                textDecoration: "none",
-                boxShadow: "3px 3px 0px #0d2008",
-              }}
-            >
-              Jiregistre Sasa 🎮
-            </a>
-          </div>
-        )}
       </div>
     </div>
   );
