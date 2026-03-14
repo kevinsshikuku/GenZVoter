@@ -7,15 +7,15 @@ export const MYTH_CARDS: MythCard[] = [
     id: "1",
     myth: "My vote haiwezi change anything.",
     reality:
-      "In 2022, only 2.3M youth aged 18–24 registered. Youth were less than 10% of total votes. Msiaskizwe literally because you chose not to show up.",
-    stat: "< 10% youth votes in 2022",
+      "In 2022 only 2.3M youth aged 18-24 registered.\nout of 8M eligible\nManze tokea tu uone Change",
+    stat: "",
     emoji: "🗳️",
   },
   {
     id: "2",
     myth: "Politics ni for boomers.",
     reality:
-      "75% of Kenya is under 35. Ukiwachia boomers kura, unawachia boomers life decisions pia. Simple maths.",
+      "75% of Kenya is under 35.\nUkiwachia boomers kura,\nunawachia boomers life decisions pia.\nSimple maths.",
     stat: "75% of Kenya is under 35",
     emoji: "📊",
   },
@@ -23,28 +23,28 @@ export const MYTH_CARDS: MythCard[] = [
     id: "3",
     myth: "All politicians are the same, what's the point?",
     reality:
-      "Kura yako decides who controls budgets for roads, hospitals, schools in your area. Hata kama mtu wako hasimpendi – block the wrong one.",
+      "Kura yako decides who controls\nthe budgets for roads, hospitals,\nSchools in your area.\nChuja wote weka new faces!",
     emoji: "🏥",
   },
   {
     id: "4",
     myth: "Nitatumia X/TikTok kuleta change.",
     reality:
-      "You'll march online but ignore the ballot? Make it make sense. TikTok views don't count at tallying centres.",
+      "You'll march online but ignore the ballot?\nMake it make sense.\nTikTok views don't count\nat tallying centres.",
     emoji: "📱",
   },
   {
     id: "5",
     myth: "Registration process ni ngumu sana.",
     reality:
-      "Show up na ID. Give it to the officer. Fingerprint. Photo. Get your slip. Hiyo tu. Less steps than creating a TikTok account.",
+      "Show up na ID.\nGive it to the officer.\nFingerprint. Photo. Get your slip.\nLess steps than creating a TikTok account.",
     emoji: "✅",
   },
   {
     id: "6",
     myth: "Sitaki kushinda line ndefu.",
     reality:
-      "If you can queue for Nyege Nyege tickets or Chicken Inn on payday, you can queue once in your lifetime to vote.",
+      "Kama unaeza Queue line ya Super-Metro Daily Tao.\nLine ya kura ni easy\njuu ni once in 5 Years.",
     emoji: "⏳",
   },
 ];
