@@ -63,18 +63,25 @@ export default function BrushButton({
   }, [wiggleOnIdle]);
 
   // Pre-cropped button assets
-  // LightModeButton_btn.png = dark maroon stroke (visible on light bg)
-  // In dark mode we reuse it with invert(1) → light cream stroke (visible on dark bg)
-  // SmallLightButton_btn.png same approach for small variant
+  // Large variant: light mode → LightModeButton_btn (dark stroke, white text)
+  //                dark mode  → BigDarkmodeButton (dark stroke, white text, no invert needed)
+  // Small variant: always SmallLightButton_btn with invert(1) in dark mode
   const isSmall = variant === "small";
+  // Large dark mode uses BigDarkmodeButton via CSS background-image crop (see below).
+  // Small dark mode inverts the light asset.
   const btnSrc = isSmall ? "/assets/SmallLightButton_btn.png" : "/assets/LightModeButton_btn.png";
   const imgW = isSmall ? 683 : 1175;
   const imgH = isSmall ? 274 : 344;
-  // Light mode: dark stroke → white text. Dark mode: inverted (light) stroke → dark green text
-  const textColor = theme === "dark" ? "var(--green-dark)" : "#ffffff";
+  const textColor = "#ffffff";
   const shadow = "drop-shadow(0px 4px 8px rgba(0,0,0,0.28)) drop-shadow(0px 1px 3px rgba(0,0,0,0.18))";
-  const imgFilter = theme === "dark" ? `invert(1) ${shadow}` : shadow;
-  const defaultWidth = isSmall ? "calc(50% - 5px)" : "min(80vw, 300px)";
+  const imgFilter = (isSmall && theme === "dark") ? `invert(1) ${shadow}` : shadow;
+  // BigDarkmodeButton (2100×1500): stroke x=524-1577, y=588-811 (1053×223px).
+  // LightModeButton_btn.png has 60px transparent padding on all sides (5.1% H, 17.4% V).
+  // Match that padding: stroke rendered = 89.8%W wide, 65.2%H tall.
+  // 179% → (1053/2100)×1.79W = 0.898W ✓  439% → (223/1500)×4.39H = 0.652H ✓
+  // backgroundPosition 50%/46% centres stroke; 15px transparent edge contains drop-shadow.
+  const useDarkBg = !isSmall && theme === "dark";
+  const defaultWidth = isSmall ? "calc(50% - 5px)" : "min(80vw, 320px)";
   const resolvedWidth = width ?? defaultWidth;
 
   return (
@@ -92,22 +99,39 @@ export default function BrushButton({
         position: "relative",
         opacity: inactive ? 0.45 : 1,
         transition: "opacity 0.2s ease",
+        // In dark mode, height is set by aspectRatio instead of the Image component.
+        ...(useDarkBg ? { aspectRatio: `${imgW} / ${imgH}` } : {}),
         ...styleProp,
       }}
     >
-      <Image
-        src={btnSrc}
-        alt=""
-        width={imgW}
-        height={imgH}
-        style={{
-          width: "100%",
-          height: height ?? "auto",
-          display: "block",
-          filter: imgFilter,
-        }}
-        priority
-      />
+      {useDarkBg ? (
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: "url(/assets/BigDarkmodeButton.png)",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "179% 439%",
+            backgroundPosition: "50% 46%",
+            filter: shadow,
+          }}
+        />
+      ) : (
+        <Image
+          src={btnSrc}
+          alt=""
+          width={imgW}
+          height={imgH}
+          style={{
+            width: "100%",
+            height: height ?? "auto",
+            display: "block",
+            filter: imgFilter,
+          }}
+          priority
+        />
+      )}
       <span
         style={{
           position: "absolute",
