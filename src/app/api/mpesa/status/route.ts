@@ -5,9 +5,8 @@ import {
   generateVerificationToken,
   formatPhone,
 } from "@/lib/mpesa";
-// Track when each STK push was initiated (set by stkpush route via header)
-// and issued tokens to prevent duplicate issuance.
-const stkTimestamps = new Map<string, number>();
+import { getStkTimestamp, allStkTimestamps } from "@/lib/stk-timestamps";
+
 const issuedTokens = new Set<string>();
 
 let cleanupCounter = 0;
@@ -15,8 +14,8 @@ function cleanup() {
   cleanupCounter++;
   if (cleanupCounter > 100) {
     const now = Date.now();
-    for (const [k, v] of stkTimestamps) {
-      if (now - v > 300_000) stkTimestamps.delete(k); // 5 min old
+    for (const [k, v] of allStkTimestamps()) {
+      if (now - v > 300_000) allStkTimestamps().delete(k); // 5 min old
     }
     issuedTokens.clear();
     cleanupCounter = 0;
@@ -30,10 +29,6 @@ const MIN_ELAPSED_SECONDS = 5;
 
 // ── Known FINAL result codes (only these should stop polling) ────────────────
 const FINAL_FAILURE_CODES = new Set([1032, 1037, 2001, 1, 1025]);
-
-export function registerStkTimestamp(checkoutRequestId: string) {
-  stkTimestamps.set(checkoutRequestId, Date.now());
-}
 
 export async function GET(req: NextRequest) {
   const id = req.nextUrl.searchParams.get("id");
@@ -52,7 +47,7 @@ export async function GET(req: NextRequest) {
   // ── Enforce minimum elapsed time ────────────────────────────────────────
   // The client passes when the STK was sent. We also track server-side.
   // Use whichever is available.
-  const sentAt = stkTimestamps.get(id) || (sentAtParam ? Number(sentAtParam) : 0);
+  const sentAt = getStkTimestamp(id) || (sentAtParam ? Number(sentAtParam) : 0);
   const elapsed = sentAt ? (Date.now() - sentAt) / 1000 : 999; // if unknown, allow
 
   try {

@@ -8,7 +8,7 @@ import {
   checkRateLimit,
   getMpesaConfig,
 } from "@/lib/mpesa";
-import { registerStkTimestamp } from "@/app/api/mpesa/status/route";
+import { registerStkTimestamp } from "@/lib/stk-timestamps";
 
 export async function POST(req: NextRequest) {
   try {
