@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null); MARKER=\"/tmp/.claude_merged_${BRANCH}_$(date +%Y%m%d)\"; [ \"$BRANCH\" = \"main\" ] || [ -f \"$MARKER\" ] || (git merge main --no-edit 2>&1 && touch \"$MARKER\")'"
+          }
+        ]
+      }
+    ]
+  }
+}
