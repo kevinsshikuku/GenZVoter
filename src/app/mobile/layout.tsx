@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "@/components/ThemeProvider";
-import BiometricGate from "@/components/mobile/BiometricGate";
+import MpesaGate from "@/components/mobile/MpesaGate";
+import { isMpesaVerifiedLocal } from "@/shared/hooks/useMpesaVerify";
 
 /* ─── Hand-drawn SVG icons ────────────────────────────── */
 
@@ -107,19 +108,17 @@ export default function MobileLayout({
   const [showGate, setShowGate] = useState(false);
   const [pendingHref, setPendingHref] = useState<string | null>(null);
 
-  /* ── Verification guard: hard-redirect if landing on non-home without creds ── */
+  /* ── Verification guard: hard-redirect if landing on non-home without M-Pesa verification ── */
   useEffect(() => {
     if (pathname !== "/mobile") {
-      const verified = localStorage.getItem("genz-verified") === "true";
-      if (!verified) router.replace("/mobile");
+      if (!isMpesaVerifiedLocal()) router.replace("/mobile");
     }
   }, [pathname, router]);
 
-  /* ── Nav tap handler: show gate if not verified, else navigate directly ── */
+  /* ── Nav tap handler: show gate if not M-Pesa verified, else navigate directly ── */
   function handleNavTap(href: string) {
     if (href === "/mobile") { router.push(href); return; }
-    const verified = localStorage.getItem("genz-verified") === "true";
-    if (verified) {
+    if (isMpesaVerifiedLocal()) {
       router.push(href);
     } else {
       setPendingHref(href);
@@ -255,9 +254,9 @@ export default function MobileLayout({
       {/* Spacer so flex layout gives main exactly (100dvh - 64px) of height */}
       <div style={{ height: "64px", flexShrink: 0 }} />
 
-      {/* Biometric gate triggered from nav taps */}
+      {/* M-Pesa verification gate triggered from nav taps */}
       {showGate && (
-        <BiometricGate
+        <MpesaGate
           onSuccess={() => {
             setShowGate(false);
             if (pendingHref) { router.push(pendingHref); setPendingHref(null); }

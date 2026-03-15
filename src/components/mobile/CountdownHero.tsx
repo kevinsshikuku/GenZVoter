@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { getCountdown } from "@/lib/countdown";
 import type { CountdownValues } from "@/lib/countdown";
 import BrushButton from "@/components/mobile/BrushButton";
-import BiometricGate from "@/components/mobile/BiometricGate";
+import MpesaGate from "@/components/mobile/MpesaGate";
 
 export default function CountdownHero() {
   const [countdown, setCountdown] = useState<CountdownValues | null>(null);
@@ -207,7 +207,7 @@ export default function CountdownHero() {
 
         {/* CTA */}
         {showGate && (
-          <BiometricGate
+          <MpesaGate
             onSuccess={() => { setShowGate(false); router.push("/mobile/register"); }}
             onDismiss={() => setShowGate(false)}
           />

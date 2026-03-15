@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { GAME_LEVELS } from "@/lib/data";
 import type { GameLevel } from "@/lib/types";
 import BrushButton from "@/components/mobile/BrushButton";
-import BiometricGate from "@/components/mobile/BiometricGate";
+import MpesaGate from "@/components/mobile/MpesaGate";
 
 export default function MobileGamePage() {
   const [completedLevels, setCompletedLevels] = useState<number[]>([]);
@@ -336,7 +336,7 @@ function PledgeSection() {
   return (
     <>
       {showGate && (
-        <BiometricGate
+        <MpesaGate
           onSuccess={() => { setShowGate(false); handlePledge(); }}
           onDismiss={() => setShowGate(false)}
         />

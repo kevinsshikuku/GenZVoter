@@ -47,3 +47,7 @@ export interface BiometricState {
   method: BiometricSupport | null;
   credentialId: string | null;
 }
+
+// ── M-Pesa verification types ────────────────────────────────────────────────
+
+export type MpesaStep = "idle" | "phone-input" | "waiting" | "success" | "error";
