@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
-import { REQUIREMENTS, GAME_LEVELS } from "@/lib/data";
+import { REQUIREMENTS, GAME_LEVELS, MYTH_CARDS } from "@/lib/data";
 import BrushButton from "@/components/mobile/BrushButton";
+import { useTheme } from "@/components/ThemeProvider";
 
 
-type Screen = "status" | "requirements";
+type Screen = "status" | "requirements" | "myths";
 
 const SCREENS: { id: Screen; label: string; icon: string }[] = [
   { id: "status",       label: "Am I Reg?",   icon: "🔍" },
   { id: "requirements", label: "What I Need", icon: "📋" },
+  { id: "myths",        label: "Myths",        icon: "🃏" },
 ];
 
 /* Shared style tokens — all backed by CSS custom properties */
@@ -31,52 +33,9 @@ const G = {
 
 export default function RegisterTab() {
   const [screen, setScreen] = useState<Screen>("status");
-  const [showWebview, setShowWebview] = useState(false);
 
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column", background: G.bg, overflowX: "hidden", overflowY: screen === "requirements" ? "visible" : "hidden" }}>
-
-      {/* IEBC webview — bottom cleared for sticky nav */}
-      {showWebview && (
-        <div style={{
-          position: "fixed", top: 0, left: "50%",
-          transform: "translateX(-50%)",
-          width: "100%", maxWidth: "430px", bottom: "72px",
-          background: "#fff", zIndex: 90,
-          display: "flex", flexDirection: "column",
-        }}>
-          {/* Native-style browser bar */}
-          <div style={{
-            padding: "10px 14px",
-            background: G.dark,
-            display: "flex", alignItems: "center", gap: "10px", flexShrink: 0,
-          }}>
-            <button
-              onClick={() => setShowWebview(false)}
-              style={{
-                background: "rgba(255,255,255,0.15)", border: "none",
-                color: "#fff", fontSize: "13px", fontWeight: 700,
-                cursor: "pointer", padding: "6px 12px", borderRadius: "8px",
-              }}
-            >
-              ← Back
-            </button>
-            <div style={{
-              flex: 1, background: "rgba(255,255,255,0.12)",
-              borderRadius: "8px", padding: "6px 12px",
-              display: "flex", alignItems: "center", gap: "6px",
-            }}>
-              <span style={{ fontSize: "12px" }}>🔒</span>
-              <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.8)" }}>verify.iebc.or.ke</span>
-            </div>
-          </div>
-          <iframe
-            src="https://verify.iebc.or.ke"
-            style={{ flex: 1, border: "none", width: "100%" }}
-            title="IEBC Voter Verification Portal"
-          />
-        </div>
-      )}
 
       {/* Sub-nav tabs */}
       <div style={{
@@ -109,20 +68,21 @@ export default function RegisterTab() {
         </div>
       </div>
 
-      <div style={{ flex: 1, overflow: screen === "requirements" ? "hidden" : "auto", WebkitOverflowScrolling: "touch", display: "flex", flexDirection: "column" } as React.CSSProperties} key={screen} className="no-scrollbar">
-        {screen === "status"       && <StatusScreen onOpenWebview={() => setShowWebview(true)} />}
+      <div style={{ flex: 1, overflow: screen === "requirements" ? "hidden" : screen === "myths" ? "hidden" : "auto", WebkitOverflowScrolling: "touch", display: "flex", flexDirection: "column" } as React.CSSProperties} key={screen} className="no-scrollbar">
+        {screen === "status"       && <StatusScreen />}
         {screen === "requirements" && <RequirementsScreen />}
+        {screen === "myths"        && <MythsScreen />}
       </div>
     </div>
   );
 }
 
 /* ─── STATUS ─────────────────────────────────────────────────── */
-function StatusScreen({ onOpenWebview }: { onOpenWebview: () => void }) {
+function StatusScreen() {
   return (
-    <div style={{ padding: "28px 20px", display: "flex", flexDirection: "column", gap: "18px" }}>
+    <div style={{ padding: "28px 20px", display: "flex", flexDirection: "column", gap: "0" }}>
       <div>
-        <p style={{ fontSize: "14px", color: G.muted, margin: 0 }}>
+        <p style={{ fontSize: "14px", color: G.muted, margin: "0 0 2px" }}>
           Chapia wasee ni ...
         </p>
       </div>
@@ -135,8 +95,8 @@ function StatusScreen({ onOpenWebview }: { onOpenWebview: () => void }) {
         ].map((item) => (
           <div key={item.label} style={{
             display: "flex", alignItems: "center", gap: "12px",
-            background: "transparent", borderRadius: "6px", padding: "12px 14px",
-            marginBottom: "10px",
+            background: "transparent", borderRadius: "6px", padding: "6px 14px",
+            marginBottom: "0",
           }}>
             <span style={{ fontSize: "22px" }}>{item.icon}</span>
             <div>
@@ -147,7 +107,14 @@ function StatusScreen({ onOpenWebview }: { onOpenWebview: () => void }) {
         ))}
 
         <div style={{ display: "flex", justifyContent: "center", marginTop: "6px" }}>
-          <BrushButton label="IEBC Portal" onClick={onOpenWebview} textColor="#22c55e" />
+          <a
+            href="https://verify.iebc.or.ke"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: "none" }}
+          >
+            <BrushButton label="IEBC Portal ↗" onClick={() => {}} textColor="#22c55e" />
+          </a>
         </div>
       </div>
 
@@ -250,6 +217,101 @@ function RequirementsScreen() {
 
       {/* suppress unused import */}
       {REQUIREMENTS && null}
+    </div>
+  );
+}
+
+/* ─── MYTHS ──────────────────────────────────────────────────── */
+function MythsScreen() {
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const { theme } = useTheme();
+
+  const shadow = "drop-shadow(0px 4px 10px rgba(0,0,0,0.28))";
+  const cardFilter = shadow;
+  const smallBtnFilter = theme === "dark" ? `invert(1) ${shadow}` : shadow;
+  const darkCardBg: React.CSSProperties = theme === "dark" ? {
+    backgroundImage: "url(/assets/BigDarkmodeButton.png)",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "179% 439%",
+    backgroundPosition: "50% 46%",
+  } : {};
+
+  const card = MYTH_CARDS[currentIdx];
+
+  const goNext = () => {
+    if (currentIdx < MYTH_CARDS.length - 1) {
+      setFlipped(false);
+      setTimeout(() => setCurrentIdx((i) => i + 1), 50);
+    }
+  };
+
+  const goPrev = () => {
+    if (currentIdx > 0) {
+      setFlipped(false);
+      setTimeout(() => setCurrentIdx((i) => i - 1), 50);
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 48) { if (diff > 0) goNext(); else goPrev(); }
+    touchStartX.current = null;
+  };
+
+  return (
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", padding: "24px 20px", background: G.bg, overflow: "hidden" }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "4px" }} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+
+        {/* Card */}
+        <div
+          onClick={() => setFlipped(!flipped)}
+          style={{ cursor: "pointer", position: "relative", height: "280px", marginLeft: "-20px", marginRight: "-20px", marginBottom: "-60px" }}
+        >
+          <div aria-hidden style={{ position: "absolute", inset: 0, filter: cardFilter, ...(theme === "dark" ? darkCardBg : { backgroundImage: "url(/assets/LightModeButton_btn.png)", backgroundSize: "100% 100%" }) }} />
+
+          {/* MYTH face */}
+          <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px", padding: "24px 28px", textAlign: "center", opacity: flipped ? 0 : 1, transition: "opacity 0.2s ease", pointerEvents: flipped ? "none" : "auto" }}>
+            <p style={{ fontSize: "clamp(14px, 4vw, 17px)", fontFamily: "system-ui, -apple-system, sans-serif", fontWeight: 700, color: "#ffffff", margin: 0, lineHeight: 1.3 }}>
+              &ldquo;{card.myth}&rdquo;
+            </p>
+            <p style={{ fontSize: "11px", fontFamily: "var(--font-kalam)", color: "rgba(255,255,255,0.6)", margin: 0 }}>Tap to see the reality</p>
+          </div>
+
+          {/* REALITY face */}
+          <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px", padding: "24px 28px", textAlign: "center", opacity: flipped ? 1 : 0, transition: "opacity 0.2s ease", pointerEvents: flipped ? "auto" : "none" }}>
+            <p style={{ fontSize: "clamp(13px, 3.8vw, 16px)", fontFamily: "var(--font-kalam)", color: "#ffffff", lineHeight: 1.5, margin: 0, whiteSpace: "pre-line" }}>
+              {card.reality}
+            </p>
+            {card.stat && <p style={{ fontSize: "11px", fontFamily: "var(--font-kalam)", color: "#fde68a", margin: 0, fontWeight: 700 }}>{card.stat}</p>}
+            <p style={{ fontSize: "11px", fontFamily: "var(--font-kalam)", color: "rgba(255,255,255,0.6)", margin: 0 }}>Tap to flip back</p>
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          {(["← Prev", flipped ? "Myth 🔄" : "Reality 🔄", "Next →"] as const).map((label, i) => {
+            const isMiddle = i === 1;
+            const isDisabled = (i === 0 && currentIdx === 0) || (i === 2 && currentIdx === MYTH_CARDS.length - 1);
+            const handleClick = i === 0 ? goPrev : i === 2 ? goNext : () => setFlipped(!flipped);
+            return (
+              <div key={label} style={{ flex: isMiddle ? 1.4 : 1, position: "relative" }}>
+                <Image src="/assets/SmallLightButton_btn.png" alt="" width={683} height={274} loading="eager" style={{ width: "100%", height: "auto", display: "block", filter: smallBtnFilter, opacity: isDisabled ? 0.35 : 1, transition: "opacity 0.2s ease" }} />
+                <button onClick={isDisabled ? undefined : handleClick} disabled={isDisabled} style={{ position: "absolute", inset: 0, background: "none", border: "none", cursor: isDisabled ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "clamp(11px, 3vw, 13px)", fontFamily: "var(--font-kalam)", fontWeight: 900, color: "#ffffff", padding: "0 8px", textAlign: "center", lineHeight: 1.2 }}>
+                  {label}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+
+        <p style={{ textAlign: "center", fontSize: "11px", fontFamily: "var(--font-kalam)", color: G.muted }}>
+          {currentIdx + 1} / {MYTH_CARDS.length} · Swipe or tap
+        </p>
+      </div>
     </div>
   );
 }
