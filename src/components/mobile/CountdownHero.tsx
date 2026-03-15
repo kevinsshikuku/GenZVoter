@@ -6,10 +6,12 @@ import { useRouter } from "next/navigation";
 import { getCountdown } from "@/lib/countdown";
 import type { CountdownValues } from "@/lib/countdown";
 import BrushButton from "@/components/mobile/BrushButton";
+import BiometricGate from "@/components/mobile/BiometricGate";
 
 export default function CountdownHero() {
   const [countdown, setCountdown] = useState<CountdownValues | null>(null);
   const [vibrating, setVibrating] = useState(false);
+  const [showGate, setShowGate] = useState(false);
   const router = useRouter();
   const confettiFired = useRef(false);
 
@@ -204,8 +206,14 @@ export default function CountdownHero() {
         )}
 
         {/* CTA */}
+        {showGate && (
+          <BiometricGate
+            onSuccess={() => { setShowGate(false); router.push("/mobile/register"); }}
+            onDismiss={() => setShowGate(false)}
+          />
+        )}
         <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
-          <BrushButton label="Cheki hio List" onClick={() => router.push("/mobile/register")} wiggleOnIdle />
+          <BrushButton label="Cheki hio List" onClick={() => setShowGate(true)} wiggleOnIdle />
           <p
             style={{
               fontSize: "clamp(10px, 2.8vw, 12px)",

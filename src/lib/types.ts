@@ -39,3 +39,11 @@ export interface IEBCRegistrationPeriod {
   isActive: boolean;
   description: string;
 }
+
+export type BiometricSupport = "webauthn" | "pin-fallback" | "skip";
+
+export interface BiometricState {
+  committed: boolean;
+  method: BiometricSupport | null;
+  credentialId: string | null;
+}

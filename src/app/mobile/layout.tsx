@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "@/components/ThemeProvider";
+import BiometricGate from "@/components/mobile/BiometricGate";
 
 /* ─── Hand-drawn SVG icons ────────────────────────────── */
 
@@ -102,7 +102,30 @@ export default function MobileLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { theme, toggle } = useTheme();
+  const [showGate, setShowGate] = useState(false);
+  const [pendingHref, setPendingHref] = useState<string | null>(null);
+
+  /* ── Verification guard: hard-redirect if landing on non-home without creds ── */
+  useEffect(() => {
+    if (pathname !== "/mobile") {
+      const verified = localStorage.getItem("genz-verified") === "true";
+      if (!verified) router.replace("/mobile");
+    }
+  }, [pathname, router]);
+
+  /* ── Nav tap handler: show gate if not verified, else navigate directly ── */
+  function handleNavTap(href: string) {
+    if (href === "/mobile") { router.push(href); return; }
+    const verified = localStorage.getItem("genz-verified") === "true";
+    if (verified) {
+      router.push(href);
+    } else {
+      setPendingHref(href);
+      setShowGate(true);
+    }
+  }
 
   /* ── Dev-only: stop the Next.js DevTools button from blocking HOME ── */
   useEffect(() => {
@@ -232,6 +255,17 @@ export default function MobileLayout({
       {/* Spacer so flex layout gives main exactly (100dvh - 64px) of height */}
       <div style={{ height: "64px", flexShrink: 0 }} />
 
+      {/* Biometric gate triggered from nav taps */}
+      {showGate && (
+        <BiometricGate
+          onSuccess={() => {
+            setShowGate(false);
+            if (pendingHref) { router.push(pendingHref); setPendingHref(null); }
+          }}
+          onDismiss={() => { setShowGate(false); setPendingHref(null); }}
+        />
+      )}
+
       {/* 4-tab sticky bottom nav */}
       <nav
         style={{
@@ -259,15 +293,17 @@ export default function MobileLayout({
               : pathname.startsWith(item.href);
 
           return (
-            <Link
+            <button
               key={item.href}
-              href={item.href}
+              onClick={() => handleNavTap(item.href)}
               style={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 gap: "3px",
-                textDecoration: "none",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
                 padding: "4px 16px 4px",
                 flex: 1,
               }}
@@ -297,7 +333,7 @@ export default function MobileLayout({
                   }}
                 />
               )}
-            </Link>
+            </button>
           );
         })}
       </nav>
