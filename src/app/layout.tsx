@@ -27,7 +27,7 @@ const kalam = Kalam({
 });
 
 export const metadata: Metadata = {
-  title: "GenZ Voter – Toke na Mbogi 2027",
+  title: "GenZ Voter – Tokea na Mbogi 2027",
   description:
     "Register. Vote. Change Kenya. If you can queue for Nyege Nyege, you can queue once to vote.",
   manifest: "/manifest.json",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     title: "GenZVoter",
   },
   openGraph: {
-    title: "GenZ Voter – 2027 Toke na Mbogi",
+    title: "GenZ Voter – 2027 Tokea na Mbogi",
     description: "Sisi ndio majority. Register to vote before 2027.",
     type: "website",
     images: [{ url: "/assets/icon-512.png" }],
