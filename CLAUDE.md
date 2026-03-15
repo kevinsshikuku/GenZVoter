@@ -1,5 +1,13 @@
 # CLAUDE.md — GenZVoter
 
+## Worktree & Session Rules
+
+- **At the start of every session**, always merge `main` into the current worktree branch before doing any work or starting the server: `git merge main`
+- After merging, stop and restart the dev server so it picks up the latest changes.
+- This ensures the worktree always has the latest code from main.
+
+---
+
 ## Project Overview
 
 **GenZ Voter App** — A mobile-first Progressive Web App (PWA) designed to get Kenyan Gen Z youth registered to vote for the 2027 elections. The app prioritizes ADHD-friendly UX, gamification, and a playful Gen Z Kenya tone (Swahili/Sheng sprinkled in).
