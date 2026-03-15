@@ -302,7 +302,6 @@ export default function BiometricGate({ onSuccess, onDismiss }: BiometricGatePro
         {/* ── PIN Verify ────────────────────────────────────────────── */}
         {!showLoading && step === "pin-verify" && (
           <>
-            <div style={{ fontSize: 48, lineHeight: 1 }}>🔐</div>
             <h2 style={{
               fontFamily: "var(--font-boogaloo)",
               fontSize: "clamp(20px, 5vw, 24px)",
@@ -310,7 +309,7 @@ export default function BiometricGate({ onSuccess, onDismiss }: BiometricGatePro
               margin: 0,
               textAlign: "center",
             }}>
-              Enter your PIN
+              Weka any number
             </h2>
             <PinInput pin={pin} refs={pinRefs} onInput={handlePinInput} onKeyDown={handlePinKeyDown} />
             {displayError && <ErrorMsg msg={displayError} />}
