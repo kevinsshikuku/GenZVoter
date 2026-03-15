@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 function isMobileDevice(): boolean {
   if (typeof navigator === "undefined") return true; // SSR: assume mobile, gate runs client-side
+  // Allow desktop in dev for testing (check window width as mobile indicator too)
+  if (typeof window !== "undefined" && window.innerWidth <= 500) return true;
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
   );

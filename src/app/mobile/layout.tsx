@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "@/components/ThemeProvider";
-import BiometricGate from "@/components/mobile/BiometricGate";
+import MpesaGate from "@/components/mobile/MpesaGate";
+import { isMpesaVerifiedLocal } from "@/shared/hooks/useMpesaVerify";
 import HomeTab from "@/components/mobile/tabs/HomeTab";
 import RegisterTab from "@/components/mobile/tabs/RegisterTab";
 import CentresTab from "@/components/mobile/tabs/CentresTab";
@@ -120,12 +121,12 @@ export default function MobileLayout({
   /* ── Read URL + localStorage synchronously so first render is already correct ── */
   const [verified, setVerified] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
-    return localStorage.getItem("genz-verified") === "true";
+    return isMpesaVerifiedLocal();
   });
   const [activeTab, setActiveTab] = useState<TabId>(() => {
     if (typeof window === "undefined") return "home";
     const tab = getTabFromPath(window.location.pathname);
-    const isVerified = localStorage.getItem("genz-verified") === "true";
+    const isVerified = isMpesaVerifiedLocal();
     // Unverified direct-URL access → silently fall back to home (no flash)
     if (tab !== "home" && !isVerified) {
       history.replaceState({}, "", "/mobile");
@@ -318,9 +319,9 @@ export default function MobileLayout({
       {/* Spacer so flex layout gives main exactly (100dvh - 64px) of height */}
       <div style={{ height: "64px", flexShrink: 0 }} />
 
-      {/* Biometric gate triggered from nav taps */}
+      {/* M-Pesa verification gate triggered from nav taps */}
       {showGate && (
-        <BiometricGate
+        <MpesaGate
           onSuccess={() => {
             setVerified(true);
             setShowGate(false);
