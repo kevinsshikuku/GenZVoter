@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { getCountdown } from "@/lib/countdown";
 import type { CountdownValues } from "@/lib/countdown";
 import BrushButton from "@/components/mobile/BrushButton";
@@ -12,7 +11,6 @@ export default function CountdownHero() {
   const [countdown, setCountdown] = useState<CountdownValues | null>(null);
   const [vibrating, setVibrating] = useState(false);
   const [showGate, setShowGate] = useState(false);
-  const router = useRouter();
   const confettiFired = useRef(false);
 
   useEffect(() => {
@@ -208,7 +206,7 @@ export default function CountdownHero() {
         {/* CTA */}
         {showGate && (
           <BiometricGate
-            onSuccess={() => { setShowGate(false); router.push("/mobile/register"); }}
+            onSuccess={() => { setShowGate(false); window.dispatchEvent(new CustomEvent("genz-navigate", { detail: "register" })); }}
             onDismiss={() => setShowGate(false)}
           />
         )}

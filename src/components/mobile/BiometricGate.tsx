@@ -43,12 +43,8 @@ export default function BiometricGate({ onSuccess, onDismiss }: BiometricGatePro
     if (isReady && step === "prompt") {
       if (isCommitted && storedMethod === "pin") {
         setStep("pin-verify");
-      } else if (isCommitted && storedMethod === "webauthn") {
-        setStep("prompt"); // will show "verify" copy
-      } else if (!isCommitted && support === "pin-fallback") {
-        setStep("pin-setup");
       }
-      // else: show the biometric prompt (default)
+      // else: always show fingerprint prompt first — PIN accessible as fallback
     }
   }, [isReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -231,20 +227,8 @@ export default function BiometricGate({ onSuccess, onDismiss }: BiometricGatePro
               margin: 0,
               textAlign: "center",
             }}>
-              {isCommitted ? "Verify wewe sio Robot" : "Tia thumb print yako"}
+              Confirm Wewe sio Robot
             </h2>
-            {!isCommitted && (
-              <p style={{
-                fontFamily: "system-ui, -apple-system, sans-serif",
-                fontSize: 14,
-                color: "var(--muted)",
-                margin: 0,
-                textAlign: "center",
-                maxWidth: 280,
-              }}>
-                Lock in your pledge for real. No shortcuts.
-              </p>
-            )}
             <p style={{
               fontFamily: "system-ui, -apple-system, sans-serif",
               fontSize: 12,
@@ -318,7 +302,6 @@ export default function BiometricGate({ onSuccess, onDismiss }: BiometricGatePro
         {/* ── PIN Verify ────────────────────────────────────────────── */}
         {!showLoading && step === "pin-verify" && (
           <>
-            <div style={{ fontSize: 48, lineHeight: 1 }}>🔐</div>
             <h2 style={{
               fontFamily: "var(--font-boogaloo)",
               fontSize: "clamp(20px, 5vw, 24px)",
@@ -326,7 +309,7 @@ export default function BiometricGate({ onSuccess, onDismiss }: BiometricGatePro
               margin: 0,
               textAlign: "center",
             }}>
-              Enter your PIN
+              Weka any number
             </h2>
             <PinInput pin={pin} refs={pinRefs} onInput={handlePinInput} onKeyDown={handlePinKeyDown} />
             {displayError && <ErrorMsg msg={displayError} />}
