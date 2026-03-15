@@ -59,7 +59,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1a3a10",
+  themeColor: "#0e100d",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -83,7 +83,7 @@ export default function RootLayout({
         {/* Prevent flash of wrong theme — runs before paint */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){var t=localStorage.getItem('genz-theme');document.documentElement.setAttribute('data-theme',t||'light');})();`,
+            __html: `(function(){var t=localStorage.getItem('genz-theme');document.documentElement.setAttribute('data-theme',t||'dark');})();`,
           }}
         />
       </head>

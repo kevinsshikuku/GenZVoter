@@ -47,7 +47,7 @@ export default function MpesaGate({ onSuccess, onDismiss }: MpesaGateProps) {
 
     // Validate: should be 9 digits (we prepend 254)
     if (!/^\d{9}$/.test(cleaned)) {
-      setLocalError("Weka nambari 9 za simu. Mfano: 712345678");
+      setLocalError("Weka number ya Mpesa");
       return;
     }
 
@@ -137,7 +137,7 @@ export default function MpesaGate({ onSuccess, onDismiss }: MpesaGateProps) {
               margin: 0,
               textAlign: "center",
             }}>
-              Confirm Wewe sio Robot
+              Verify wewe sio Bot
             </h2>
 
             <p style={{

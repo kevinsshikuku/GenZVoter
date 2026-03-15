@@ -5,7 +5,6 @@ import {
   generateVerificationToken,
   formatPhone,
 } from "@/lib/mpesa";
-
 // Track when each STK push was initiated (set by stkpush route via header)
 // and issued tokens to prevent duplicate issuance.
 const stkTimestamps = new Map<string, number>();
@@ -87,6 +86,11 @@ export async function GET(req: NextRequest) {
       const { token, expiresAt } = await generateVerificationToken(phoneHash, id);
       issuedTokens.add(id);
 
+      // Fire-and-forget: record verified user in Firestore
+      recordVerifiedUser(phoneHash, id).catch((err) =>
+        console.error("[Firestore] Failed to record verified user:", err)
+      );
+
       return NextResponse.json({
         status: "completed",
         token,
@@ -127,4 +131,25 @@ export async function GET(req: NextRequest) {
       message: "Safaricom bado inaprocess. Subiri kidogo...",
     });
   }
+}
+
+async function recordVerifiedUser(phoneHash: string, checkoutRequestId: string) {
+  const { getAdminDb } = await import("@/lib/firebase-admin");
+  const { FieldValue } = await import("firebase-admin/firestore");
+
+  const db = getAdminDb();
+  const userRef = db.collection("users").doc(phoneHash);
+  const counterRef = db.collection("counters").doc("verified-users");
+
+  await db.runTransaction(async (tx) => {
+    const userSnap = await tx.get(userRef);
+    if (userSnap.exists) return; // already recorded, skip
+
+    tx.set(userRef, {
+      phoneHash,
+      checkoutRequestId,
+      verifiedAt: FieldValue.serverTimestamp(),
+    });
+    tx.set(counterRef, { count: FieldValue.increment(1) }, { merge: true });
+  });
 }

@@ -6,12 +6,14 @@ import { getCountdown } from "@/lib/countdown";
 import type { CountdownValues } from "@/lib/countdown";
 import BrushButton from "@/components/mobile/BrushButton";
 import MpesaGate from "@/components/mobile/MpesaGate";
+import { useVerifiedCount } from "@/shared/hooks/useVerifiedCount";
 
 export default function CountdownHero() {
   const [countdown, setCountdown] = useState<CountdownValues | null>(null);
   const [vibrating, setVibrating] = useState(false);
   const [showGate, setShowGate] = useState(false);
   const confettiFired = useRef(false);
+  const { count } = useVerifiedCount();
 
   useEffect(() => {
     setCountdown(getCountdown());
@@ -48,15 +50,39 @@ export default function CountdownHero() {
         display: "flex",
         flexDirection: "column",
         background: "var(--surface)",
-        position: "relative",
         overflow: "hidden",
       }}
     >
-      {/* GenZ image — home page only */}
+      {/* People counter — marker font, tight to top, above image */}
+      <div style={{ textAlign: "center", lineHeight: 1, padding: "4px 0 0", flexShrink: 0, position: "relative", zIndex: 3 }}>
+        <span
+          style={{
+            fontFamily: "var(--font-marker)",
+            fontSize: "clamp(36px, 11vw, 56px)",
+            color: "var(--foreground)",
+            lineHeight: 1,
+          }}
+        >
+          {count !== null ? count.toLocaleString() : "---"}
+        </span>
+        <span
+          style={{
+            fontFamily: "var(--font-marker)",
+            fontSize: "clamp(22px, 6.5vw, 36px)",
+            color: "var(--foreground)",
+            marginLeft: "1px",
+            lineHeight: 1,
+          }}
+        >
+          people
+        </span>
+      </div>
+
+      {/* GenZ image — edge to edge, no side margin */}
       <div
         style={{
           width: "100%",
-          flex: "0 0 50%",
+          flex: "0 0 43%",
           minHeight: 0,
           position: "relative",
           overflow: "visible",
@@ -68,163 +94,75 @@ export default function CountdownHero() {
           fill
           style={{
             objectFit: "contain",
-            objectPosition: "bottom center",
-            transform: "scale(1.18)",
-            transformOrigin: "bottom center",
+            objectPosition: "center center",
+            transform: "scale(1.45)",
+            transformOrigin: "center center",
           }}
           priority
         />
       </div>
 
-      {/* Content */}
-      <div
-        style={{
-          flex: "1 1 0",
-          minHeight: 0,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "space-evenly",
-          padding: "0 20px 8px",
-          marginTop: "-80px",
-          textAlign: "center",
-          overflow: "hidden",
-        }}
-      >
-        {/* IN X DAYS */}
-        {countdown && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              gap: "8px",
-              justifyContent: "center",
-            }}
-          >
-            <span
-              style={{
-                fontSize: "clamp(10px, 2.5vw, 14px)",
-                fontFamily: "var(--font-kalam)",
-                fontWeight: 700,
-                color: "var(--subtle)",
-                textTransform: "uppercase",
-                letterSpacing: "0.12em",
-              }}
-            >
-              IN
-            </span>
-            <span
-              className={vibrating ? "vibrate" : ""}
-              style={{
-                fontSize: "clamp(48px, 15vw, 86px)",
-                fontFamily: "var(--font-marker)",
-                color: "var(--green-dark)",
-                lineHeight: 1,
-                fontVariantNumeric: "tabular-nums",
-              }}
-            >
-              {countdown.days}
-            </span>
-            <span
-              style={{
-                fontSize: "clamp(10px, 2.5vw, 14px)",
-                fontFamily: "var(--font-kalam)",
-                fontWeight: 700,
-                color: "var(--subtle)",
-                textTransform: "uppercase",
-                letterSpacing: "0.12em",
-              }}
-            >
-              DAYS
-            </span>
-          </div>
-        )}
-
-        {/* NI MBAYA! */}
+      {/* 512 days to go… — overlaps image, zero top gap */}
+      {countdown && (
         <div
+          className={vibrating ? "vibrate" : ""}
           style={{
-            fontSize: "clamp(22px, 6.5vw, 42px)",
-            fontFamily: "var(--font-marker)",
-            color: "var(--green-dark)",
-            borderBottom: "3px solid #f59e0b",
-            paddingBottom: "2px",
+            textAlign: "center",
+            marginTop: "-10px",
+            zIndex: 2,
+            flexShrink: 0,
+            padding: "0 8px",
+            fontSize: "clamp(40px, 13vw, 72px)",
+            fontFamily: "var(--font-kalam)",
+            fontWeight: 700,
+            color: "var(--foreground)",
+            lineHeight: 0.95,
+            fontVariantNumeric: "tabular-nums",
+            textTransform: "none",
           }}
         >
-          NI MBAYA! 😤
+          {countdown.days} days to go…
         </div>
+      )}
 
-        {/* Subline */}
+      {/* Ni Mbaya — tight below days */}
+      <div style={{ textAlign: "center", flexShrink: 0, lineHeight: 1 }}>
+        <span
+          style={{
+            fontSize: "clamp(20px, 6vw, 30px)",
+            fontFamily: "var(--font-marker)",
+            color: "var(--foreground)",
+            lineHeight: 1.1,
+          }}
+        >
+          Ni Mbaya
+        </span>
+      </div>
+
+
+{/* Cheki hio List + subtitle */}
+      <div style={{ padding: "6px 10px 2px", flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <BrushButton label="Confirm Kura" onClick={() => setShowGate(true)} wiggleOnIdle />
         <p
           style={{
-            fontSize: "clamp(11px, 3.2vw, 14px)",
+            fontSize: "clamp(10px, 2.8vw, 12px)",
             fontFamily: "var(--font-kalam)",
-            color: "var(--muted)",
-            margin: 0,
-            lineHeight: 1.4,
+            color: "var(--subtle)",
+            margin: "3px 0 0",
+            textAlign: "center",
           }}
         >
-          Ukilalisha usiwai lia aty hakuna change bro!!
+          Umesota na hauna Kura! Wacha Ufala... Hi kitu ni Once in 5yrs
         </p>
-
-        {/* HRS / MIN / SEC ticker */}
-        {countdown && (
-          <div style={{ display: "flex", gap: "16px" }}>
-            {[
-              { v: countdown.hours,   l: "HRS" },
-              { v: countdown.minutes, l: "MIN" },
-              { v: countdown.seconds, l: "SEC" },
-            ].map(({ v, l }) => (
-              <div key={l} style={{ textAlign: "center" }}>
-                <div
-                  style={{
-                    fontSize: "clamp(18px, 5vw, 24px)",
-                    fontFamily: "var(--font-marker)",
-                    color: "var(--green-dark)",
-                    fontVariantNumeric: "tabular-nums",
-                    lineHeight: 1,
-                  }}
-                >
-                  {String(v).padStart(2, "0")}
-                </div>
-                <div
-                  style={{
-                    fontSize: "9px",
-                    fontFamily: "var(--font-kalam)",
-                    color: "var(--subtle)",
-                    fontWeight: 700,
-                    letterSpacing: "0.1em",
-                    marginTop: "2px",
-                  }}
-                >
-                  {l}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* CTA */}
-        {showGate && (
-          <MpesaGate
-            onSuccess={() => { setShowGate(false); window.dispatchEvent(new CustomEvent("genz-navigate", { detail: "register" })); }}
-            onDismiss={() => setShowGate(false)}
-          />
-        )}
-        <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
-          <BrushButton label="Cheki hio List" onClick={() => setShowGate(true)} wiggleOnIdle />
-          <p
-            style={{
-              fontSize: "clamp(10px, 2.8vw, 12px)",
-              fontFamily: "var(--font-kalam)",
-              color: "var(--subtle)",
-              margin: 0,
-              textAlign: "center",
-            }}
-          >
-            Umesota na hauna Kura! Wacha Ufala... Hi kitu ni Once in 5yrs
-          </p>
-        </div>
       </div>
+
+      {/* MpesaGate modal */}
+      {showGate && (
+        <MpesaGate
+          onSuccess={() => { setShowGate(false); window.dispatchEvent(new CustomEvent("genz-navigate", { detail: "register" })); }}
+          onDismiss={() => setShowGate(false)}
+        />
+      )}
     </div>
   );
 }

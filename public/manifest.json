@@ -4,8 +4,8 @@
   "description": "Register. Vote. Change Kenya. For the Gen Z squad.",
   "start_url": "/mobile",
   "display": "standalone",
-  "background_color": "#f5f5f0",
-  "theme_color": "#1a3a10",
+  "background_color": "#0e100d",
+  "theme_color": "#0e100d",
   "orientation": "portrait",
   "icons": [
     {

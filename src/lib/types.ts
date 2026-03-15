@@ -5,12 +5,27 @@ export interface RegistrationCentre {
   constituency: string;
   ward?: string;
   address: string;
-  landmark?: string;       // Very short description or map hint
+  /** Primary landmark — short map hint shown as pill */
+  landmark?: string;
+  /** Additional nearby landmarks for richer search matching */
+  nearbyLandmarks?: string[];
   status: "open" | "closed" | "seasonal";
   hours?: string;
   phone?: string;
   /** Tier of the registration centre */
   type: "constituency" | "ward" | "dynamic";
+  /** Approx. daily registration capacity */
+  capacity?: number;
+  /** Services available at this centre beyond basic registration */
+  services?: string[];
+  /** Extra notes shown to user (e.g. "Bring 2 passport photos") */
+  notes?: string;
+  /** Direct Google Maps URL for directions */
+  googleMapsUrl?: string;
+  /** GPS coordinates for potential map integration */
+  coordinates?: { lat: number; lng: number };
+  /** ISO date string — when this entry was last verified against IEBC data */
+  lastVerified?: string;
 }
 
 export interface MythCard {
