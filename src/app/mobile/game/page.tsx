@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { GAME_LEVELS } from "@/lib/data";
 import type { GameLevel } from "@/lib/types";
 import BrushButton from "@/components/mobile/BrushButton";
+import BiometricGate from "@/components/mobile/BiometricGate";
 
 export default function MobileGamePage() {
   const [completedLevels, setCompletedLevels] = useState<number[]>([]);
@@ -305,6 +306,7 @@ export default function MobileGamePage() {
 
 function PledgeSection() {
   const [pledged, setPledged] = useState(false);
+  const [showGate, setShowGate] = useState(false);
 
   useEffect(() => {
     setPledged(!!localStorage.getItem("genz-voter-pledge"));
@@ -332,63 +334,71 @@ function PledgeSection() {
   };
 
   return (
-    <div
-      style={{
-        marginTop: "28px",
-        background: "linear-gradient(135deg, rgba(236,72,153,0.15), rgba(124,58,237,0.1))",
-        border: "1px solid rgba(236,72,153,0.3)",
-        borderRadius: "20px",
-        padding: "24px",
-        textAlign: "center",
-      }}
-    >
-      {pledged ? (
-        <>
-          <div style={{ fontSize: "48px", marginBottom: "12px" }}>🎉</div>
-          <h2 style={{ fontSize: "20px", fontWeight: 900, color: "var(--text)", margin: "0 0 8px" }}>
-            Umesign! Respect. 🫡
-          </h2>
-          <p style={{ fontSize: "14px", color: "#94a3b8", margin: "0 0 16px" }}>
-            Screenshot hii na utume squad yako. Lazima tuongeze kura.
-          </p>
-          <button
-            onClick={() => {
-              if (navigator.share) {
-                navigator.share({
-                  title: "GenZ Voter 2027",
-                  text: "Nimejicommit kujiregistar na kupiga kura 2027. Toke na mbogi 👀 Check genzvoter.ke",
-                  url: window.location.origin,
-                });
-              }
-            }}
-            style={{
-              padding: "14px 24px",
-              background: "linear-gradient(135deg, #7c3aed, #a855f7)",
-              border: "none",
-              borderRadius: "14px",
-              color: "#fff",
-              fontSize: "14px",
-              fontWeight: 700,
-              cursor: "pointer",
-            }}
-          >
-            Share to WhatsApp Squad 💬
-          </button>
-        </>
-      ) : (
-        <>
-          <div style={{ fontSize: "40px", marginBottom: "12px" }}>🫡</div>
-          <h2 style={{ fontSize: "20px", fontWeight: 900, color: "var(--text)", margin: "0 0 8px" }}>
-            Commit to Vote 2027
-          </h2>
-          <p style={{ fontSize: "14px", color: "#94a3b8", margin: "0 0 20px", lineHeight: 1.6 }}>
-            Tap below. Get confetti. Screenshot na utume squad.
-          </p>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <BrushButton label="Nitaenda Kupiga Kura 2027 🗳️" onClick={handlePledge} />
-          </div>
-        </>
+    <>
+      {showGate && (
+        <BiometricGate
+          onSuccess={() => { setShowGate(false); handlePledge(); }}
+          onDismiss={() => setShowGate(false)}
+        />
       )}
-    </div>
+      <div
+        style={{
+          marginTop: "28px",
+          background: "linear-gradient(135deg, rgba(236,72,153,0.15), rgba(124,58,237,0.1))",
+          border: "1px solid rgba(236,72,153,0.3)",
+          borderRadius: "20px",
+          padding: "24px",
+          textAlign: "center",
+        }}
+      >
+        {pledged ? (
+          <>
+            <div style={{ fontSize: "48px", marginBottom: "12px" }}>🎉</div>
+            <h2 style={{ fontSize: "20px", fontWeight: 900, color: "var(--text)", margin: "0 0 8px" }}>
+              Umesign! Respect. 🫡
+            </h2>
+            <p style={{ fontSize: "14px", color: "#94a3b8", margin: "0 0 16px" }}>
+              Screenshot hii na utume squad yako. Lazima tuongeze kura.
+            </p>
+            <button
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({
+                    title: "GenZ Voter 2027",
+                    text: "Nimejicommit kujiregistar na kupiga kura 2027. Toke na mbogi 👀 Check genzvoter.ke",
+                    url: window.location.origin,
+                  });
+                }
+              }}
+              style={{
+                padding: "14px 24px",
+                background: "linear-gradient(135deg, #7c3aed, #a855f7)",
+                border: "none",
+                borderRadius: "14px",
+                color: "#fff",
+                fontSize: "14px",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              Share to WhatsApp Squad 💬
+            </button>
+          </>
+        ) : (
+          <>
+            <div style={{ fontSize: "40px", marginBottom: "12px" }}>🫆</div>
+            <h2 style={{ fontSize: "20px", fontWeight: 900, color: "var(--text)", margin: "0 0 8px" }}>
+              Commit to Vote 2027
+            </h2>
+            <p style={{ fontSize: "14px", color: "#94a3b8", margin: "0 0 20px", lineHeight: 1.6 }}>
+              Tia thumb print yako. Lock in the pledge for real.
+            </p>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <BrushButton label="Nitaenda Kupiga Kura 2027 🗳️" onClick={() => setShowGate(true)} />
+            </div>
+          </>
+        )}
+      </div>
+    </>
   );
 }
