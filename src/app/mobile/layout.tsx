@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "@/components/ThemeProvider";
 import MpesaGate from "@/components/mobile/MpesaGate";
 import { isMpesaVerifiedLocal } from "@/shared/hooks/useMpesaVerify";
+import HomeTab from "@/components/mobile/tabs/HomeTab";
+import RegisterTab from "@/components/mobile/tabs/RegisterTab";
+import CentresTab from "@/components/mobile/tabs/CentresTab";
+import InfoTab from "@/components/mobile/tabs/InfoTab";
 
 /* ─── Hand-drawn SVG icons ────────────────────────────── */
 
@@ -90,41 +93,69 @@ function ProfileIcon() {
   );
 }
 
-const NAV_ITEMS = [
-  { href: "/mobile",          label: "Home",     Icon: HomeIcon     },
-  { href: "/mobile/register", label: "Register", Icon: RegisterIcon },
-  { href: "/mobile/centres",  label: "Centres",  Icon: CentresIcon  },
-  { href: "/mobile/info",     label: "Info",     Icon: InfoIcon     },
+/* ─── Tab definitions ─────────────────────────────────── */
+
+type TabId = "home" | "register" | "centres" | "info";
+
+const NAV_ITEMS: { href: string; tabId: TabId; label: string; Icon: React.ComponentType<{ active: boolean }> }[] = [
+  { href: "/mobile",          tabId: "home",     label: "Home",     Icon: HomeIcon     },
+  { href: "/mobile/register", tabId: "register", label: "Register", Icon: RegisterIcon },
+  { href: "/mobile/centres",  tabId: "centres",  label: "Centres",  Icon: CentresIcon  },
+  { href: "/mobile/info",     tabId: "info",     label: "Info",     Icon: InfoIcon     },
 ];
 
+function getTabFromPath(path: string): TabId {
+  if (path.startsWith("/mobile/register")) return "register";
+  if (path.startsWith("/mobile/centres"))  return "centres";
+  if (path.startsWith("/mobile/info"))     return "info";
+  return "home";
+}
+
 export default function MobileLayout({
-  children,
+  children: _children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-  const router = useRouter();
   const { theme, toggle } = useTheme();
-  const [showGate, setShowGate] = useState(false);
-  const [pendingHref, setPendingHref] = useState<string | null>(null);
 
-  /* ── Verification guard: hard-redirect if landing on non-home without M-Pesa verification ── */
+  /* ── Read URL + localStorage synchronously so first render is already correct ── */
+  const [verified, setVerified] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return isMpesaVerifiedLocal();
+  });
+  const [activeTab, setActiveTab] = useState<TabId>(() => {
+    if (typeof window === "undefined") return "home";
+    const tab = getTabFromPath(window.location.pathname);
+    const isVerified = isMpesaVerifiedLocal();
+    // Unverified direct-URL access → silently fall back to home (no flash)
+    if (tab !== "home" && !isVerified) {
+      history.replaceState({}, "", "/mobile");
+      return "home";
+    }
+    return tab;
+  });
+
+  const [showGate, setShowGate]     = useState(false);
+  const [pendingTab, setPendingTab] = useState<{ href: string; tabId: TabId } | null>(null);
+
+  /* ── Sync tab state when browser back/forward is used ── */
   useEffect(() => {
-    if (pathname !== "/mobile") {
-      if (!isMpesaVerifiedLocal()) router.replace("/mobile");
-    }
-  }, [pathname, router]);
+    const onPop = () => setActiveTab(getTabFromPath(window.location.pathname));
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
 
-  /* ── Nav tap handler: show gate if not M-Pesa verified, else navigate directly ── */
-  function handleNavTap(href: string) {
-    if (href === "/mobile") { router.push(href); return; }
-    if (isMpesaVerifiedLocal()) {
-      router.push(href);
-    } else {
-      setPendingHref(href);
-      setShowGate(true);
-    }
-  }
+  /* ── Handle tab navigation dispatched from child components (e.g. CountdownHero CTA) ── */
+  useEffect(() => {
+    const onNav = (e: Event) => {
+      const tab = (e as CustomEvent<TabId>).detail;
+      setVerified(true);
+      setActiveTab(tab);
+      history.pushState({}, "", `/mobile/${tab}`);
+    };
+    window.addEventListener("genz-navigate", onNav);
+    return () => window.removeEventListener("genz-navigate", onNav);
+  }, []);
 
   /* ── Dev-only: stop the Next.js DevTools button from blocking HOME ── */
   useEffect(() => {
@@ -148,6 +179,22 @@ export default function MobileLayout({
     const t = setTimeout(injectFix, 400);
     return () => clearTimeout(t);
   }, []);
+
+  /* ── Nav tap: instant state switch, URL sync via history API ── */
+  function handleNavTap(href: string, tabId: TabId) {
+    if (tabId === "home") {
+      setActiveTab("home");
+      history.pushState({}, "", href);
+      return;
+    }
+    if (verified) {
+      setActiveTab(tabId);
+      history.pushState({}, "", href);
+    } else {
+      setPendingTab({ href, tabId });
+      setShowGate(true);
+    }
+  }
 
   return (
     <div
@@ -243,12 +290,30 @@ export default function MobileLayout({
       {/* Spacer for fixed header */}
       <div style={{ height: "72px", flexShrink: 0 }} />
 
-      {/* Pages live here — no page-level scroll; pages manage their own scroll */}
+      {/* Tab content — all tabs mounted simultaneously, toggled by display */}
       <main
-        style={{ flex: 1, overflow: "hidden" }}
+        style={{ flex: 1, overflow: "hidden", position: "relative" }}
         className="no-scrollbar"
       >
-        {children}
+        {/* Home tab — always mounted */}
+        <div style={{ position: "absolute", inset: 0, display: activeTab === "home" ? "flex" : "none", flexDirection: "column" }}>
+          <HomeTab />
+        </div>
+
+        {/* Protected tabs — only mounted after verification, then kept alive */}
+        {verified && (
+          <>
+            <div style={{ position: "absolute", inset: 0, display: activeTab === "register" ? "flex" : "none", flexDirection: "column" }}>
+              <RegisterTab />
+            </div>
+            <div style={{ position: "absolute", inset: 0, display: activeTab === "centres" ? "flex" : "none", flexDirection: "column" }}>
+              <CentresTab />
+            </div>
+            <div style={{ position: "absolute", inset: 0, display: activeTab === "info" ? "flex" : "none", flexDirection: "column" }}>
+              <InfoTab />
+            </div>
+          </>
+        )}
       </main>
 
       {/* Spacer so flex layout gives main exactly (100dvh - 64px) of height */}
@@ -258,10 +323,15 @@ export default function MobileLayout({
       {showGate && (
         <MpesaGate
           onSuccess={() => {
+            setVerified(true);
             setShowGate(false);
-            if (pendingHref) { router.push(pendingHref); setPendingHref(null); }
+            if (pendingTab) {
+              setActiveTab(pendingTab.tabId);
+              history.pushState({}, "", pendingTab.href);
+              setPendingTab(null);
+            }
           }}
-          onDismiss={() => { setShowGate(false); setPendingHref(null); }}
+          onDismiss={() => { setShowGate(false); setPendingTab(null); }}
         />
       )}
 
@@ -286,15 +356,12 @@ export default function MobileLayout({
         }}
       >
         {NAV_ITEMS.map((item) => {
-          const isActive =
-            item.href === "/mobile"
-              ? pathname === "/mobile"
-              : pathname.startsWith(item.href);
+          const isActive = activeTab === item.tabId;
 
           return (
             <button
               key={item.href}
-              onClick={() => handleNavTap(item.href)}
+              onClick={() => handleNavTap(item.href, item.tabId)}
               style={{
                 display: "flex",
                 flexDirection: "column",
