@@ -144,6 +144,18 @@ export default function MobileLayout({
     return () => window.removeEventListener("popstate", onPop);
   }, []);
 
+  /* ── Handle tab navigation dispatched from child components (e.g. CountdownHero CTA) ── */
+  useEffect(() => {
+    const onNav = (e: Event) => {
+      const tab = (e as CustomEvent<TabId>).detail;
+      setVerified(true);
+      setActiveTab(tab);
+      history.pushState({}, "", `/mobile/${tab}`);
+    };
+    window.addEventListener("genz-navigate", onNav);
+    return () => window.removeEventListener("genz-navigate", onNav);
+  }, []);
+
   /* ── Dev-only: stop the Next.js DevTools button from blocking HOME ── */
   useEffect(() => {
     const injectFix = () => {
