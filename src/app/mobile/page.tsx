@@ -1,5 +1,2 @@
-import CountdownHero from "@/components/mobile/CountdownHero";
-
-export default function MobileHome() {
-  return <CountdownHero />;
-}
+// Tab content is rendered directly by the mobile layout for instant switching.
+export default function Page() { return null; }
