@@ -227,20 +227,8 @@ export default function BiometricGate({ onSuccess, onDismiss }: BiometricGatePro
               margin: 0,
               textAlign: "center",
             }}>
-              {isCommitted ? "Verify wewe sio Robot" : "Tia thumb print yako"}
+              Confirm Wewe sio Robot
             </h2>
-            {!isCommitted && (
-              <p style={{
-                fontFamily: "system-ui, -apple-system, sans-serif",
-                fontSize: 14,
-                color: "var(--muted)",
-                margin: 0,
-                textAlign: "center",
-                maxWidth: 280,
-              }}>
-                Lock in your pledge for real. No shortcuts.
-              </p>
-            )}
             <p style={{
               fontFamily: "system-ui, -apple-system, sans-serif",
               fontSize: 12,
