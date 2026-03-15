@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Permanent_Marker, Kalam, Boogaloo } from "next/font/google";
 import ThemeProvider from "@/components/ThemeProvider";
+import MobileGate from "@/components/MobileGate";
 import "./globals.css";
 
 const marker = Permanent_Marker({
@@ -70,7 +71,9 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <MobileGate>
+          <ThemeProvider>{children}</ThemeProvider>
+        </MobileGate>
       </body>
     </html>
   );
