@@ -43,12 +43,8 @@ export default function BiometricGate({ onSuccess, onDismiss }: BiometricGatePro
     if (isReady && step === "prompt") {
       if (isCommitted && storedMethod === "pin") {
         setStep("pin-verify");
-      } else if (isCommitted && storedMethod === "webauthn") {
-        setStep("prompt"); // will show "verify" copy
-      } else if (!isCommitted && support === "pin-fallback") {
-        setStep("pin-setup");
       }
-      // else: show the biometric prompt (default)
+      // else: always show fingerprint prompt first — PIN accessible as fallback
     }
   }, [isReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
